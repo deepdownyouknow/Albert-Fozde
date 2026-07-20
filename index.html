@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Főzde — recepttervező</title>
+<meta name="theme-color" content="#17130E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Főzde">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17130E; --panel:#211B13; --panel2:#2A2318; --border:#3A3122; --border2:#4A3F2C;
+  --text:#EFE7D6; --muted:#A2957B; --dim:#6E6350;
+  --gold:#E5A63C; --gold-soft:#8A6A2E; --green:#94A85A; --red:#C96A4A;
+  --radius:10px;
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px}
+button{font-family:var(--body);cursor:pointer}
+input,select,textarea{font-family:var(--body);color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:7px 8px;font-size:13px;outline:none;min-width:0;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input[type=number]{font-family:var(--mono);text-align:right}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+a{color:var(--gold)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 90px}
+header.top{display:flex;align-items:center;gap:10px;padding:16px 0 12px;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.5px;color:var(--gold);display:flex;align-items:center;gap:9px}
+.logo svg{width:24px;height:24px;flex:none}
+.logo small{font-family:var(--body);font-weight:500;font-size:12px;color:var(--dim);letter-spacing:.2px;margin-top:6px}
+.spacer{flex:1}
+.btn{background:var(--panel2);border:1px solid var(--border2);color:var(--text);padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:border-color .15s, background .15s;white-space:nowrap}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--gold);color:#1C1509;border-color:var(--gold)}
+.btn.primary:hover{background:#F0B653}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--text)}
+.btn.danger:hover{border-color:var(--red);color:var(--red)}
+.btn.small{padding:5px 10px;font-size:12px;border-radius:6px}
+/* ---------- lista ---------- */
+.list-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+h1{font-family:var(--display);font-weight:700;font-size:21px}
+.count{color:var(--dim);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:15px;display:flex;gap:14px;cursor:pointer;transition:border-color .15s}
+.card:hover{border-color:var(--gold-soft)}
+.glass{flex:none}
+.card h3{font-family:var(--display);font-weight:700;font-size:16px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .style{color:var(--muted);font-size:12px;margin-bottom:10px}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 7px;white-space:nowrap}
+.chip b{color:var(--text);font-weight:600}
+.card .body{min-width:0;flex:1}
+.empty{border:1px dashed var(--border2);border-radius:var(--radius);padding:56px 20px;text-align:center;color:var(--muted)}
+.empty p{margin-top:6px;font-size:13px;color:var(--dim)}
+/* ---------- szerkesztő ---------- */
+.ed-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.name-input{font-family:var(--display);font-weight:700;font-size:22px;background:transparent;border:1px solid transparent;padding:4px 8px;flex:1;min-width:200px}
+.name-input:hover{border-color:var(--border)}
+.name-input:focus{border-color:var(--gold);background:var(--bg)}
+.save-state{font-size:12px;color:var(--dim);min-width:56px}
+.meta-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.meta-row input{flex:1;min-width:150px;max-width:240px}
+.statbar{display:flex;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow-x:auto;scrollbar-width:thin}
+.stat{padding:12px 16px;border-right:1px solid var(--border);min-width:84px;flex:none}
+.stat:last-child{border-right:none}
+.stat .lab{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--dim);margin-bottom:3px;white-space:nowrap}
+.stat .val{font-family:var(--mono);font-weight:600;font-size:16px;white-space:nowrap}
+.stat .val small{font-size:10px;color:var(--muted);font-weight:400}
+.stat.color-stat{display:flex;gap:10px;align-items:center}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px}
+.panel > .ph{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border)}
+.panel > .ph h2{font-family:var(--display);font-size:14px;font-weight:700}
+.panel > .ph .sum{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;margin-left:auto}
+.panel .pb{padding:12px 14px 14px}
+/* sor-alapú hozzávaló-lista */
+.rows{display:flex;flex-direction:column;gap:8px}
+.irow{display:grid;grid-template-columns:var(--cols);gap:6px;align-items:end}
+.fld{display:flex;flex-direction:column;gap:2px;min-width:0}
+.flab{font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--dim);font-weight:600;white-space:nowrap;overflow:hidden}
+.irow:not(:first-child) .flab{display:none}
+.calcv{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right;padding:8px 4px;white-space:nowrap}
+.fld-rm button{background:none;border:1px solid transparent;color:var(--dim);font-size:17px;padding:5px 8px;border-radius:6px;line-height:1}
+.fld-rm button:hover{color:var(--red);background:var(--bg)}
+.addrow{margin-top:10px}
+.kv{display:grid;grid-template-columns:1fr 120px;gap:8px 10px;align-items:center}
+.kv label{font-size:12px;color:var(--muted)}
+.kv .unit-in{display:flex;align-items:center;gap:6px}
+.kv .unit-in span{font-size:11px;color:var(--dim);font-family:var(--mono);flex:none}
+.water-grid{display:grid;grid-template-columns:1fr auto;gap:6px 14px;font-size:13px}
+.water-grid .wl{color:var(--muted)}
+.water-grid .wv{font-family:var(--mono);font-weight:600;text-align:right}
+textarea{min-height:90px;resize:vertical;line-height:1.5}
+.modal-bg{position:fixed;inset:0;background:rgba(10,8,5,.7);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal{background:var(--panel);border:1px solid var(--border2);border-radius:12px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto}
+.modal .ph{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border)}
+.modal .ph h2{font-family:var(--display);font-size:16px}
+.modal .pb{padding:16px 18px}
+.modal .pf{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.hint{font-size:12px;color:var(--dim);line-height:1.5;margin-top:10px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--gold-soft);color:var(--text);padding:10px 18px;border-radius:8px;font-size:13px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+/* ---------- stíluskalauz ---------- */
+.style-panel .pb{display:flex;flex-direction:column;gap:7px}
+.srow{display:flex;align-items:center;gap:10px}
+.slab{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text);background:var(--panel2);border:1px solid var(--border2);border-radius:4px;padding:4px 0;width:58px;text-align:center;flex:none}
+.slab.out{color:#FFD9CC;background:#5E2C1F;border-color:#8A4534}
+.sbar{position:relative;flex:1;height:26px;background:var(--bg);border:1px solid var(--border);border-radius:5px;overflow:hidden}
+.sfill{position:absolute;top:0;bottom:0;background:#49572F;display:flex;justify-content:space-between;align-items:center;padding:0 7px}
+.sfill span{font-family:var(--mono);font-size:10px;color:#C9D3AB;opacity:.9}
+.smark{position:absolute;top:0;bottom:0;width:3px;background:var(--gold);transform:translateX(-1.5px);box-shadow:0 0 6px rgba(229,166,60,.6)}
+.scur{position:absolute;top:50%;transform:translate(7px,-50%);font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text);text-shadow:0 1px 3px #000,0 0 5px #000}
+.scur.flip{transform:translate(calc(-100% - 7px),-50%)}
+/* ---------- malátaösszetétel sáv ---------- */
+.maltbar{display:flex;height:14px;border-radius:7px;overflow:hidden;border:1px solid var(--border);margin-bottom:12px}
+.maltbar:empty{display:none}
+.mseg{min-width:3px}
+/* ---------- komló grafikon ---------- */
+.hopchart{display:flex;flex-direction:column;gap:6px;margin-top:14px;border-top:1px solid var(--border);padding-top:12px}
+.hrow2{display:flex;align-items:center;gap:8px;font-size:11px}
+.hname{width:110px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.htrack{flex:1;height:10px;background:var(--bg);border-radius:5px;overflow:hidden}
+.hfill{height:100%;border-radius:5px}
+.hval{font-family:var(--mono);color:var(--muted);flex:none;font-size:10px;width:96px;text-align:right}
+.hlegend{display:flex;gap:14px;font-size:10px;color:var(--dim);margin-top:3px;flex-wrap:wrap}
+.hlegend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+/* ---------- panel-polírozás ---------- */
+.panel > .ph{background:rgba(0,0,0,.18);border-radius:var(--radius) var(--radius) 0 0}
+.panel > .ph svg{width:15px;height:15px;color:var(--gold);flex:none}
+.statbar{position:relative}
+.statbar::after{content:'';position:absolute;top:0;left:0;height:2px;width:100%;min-width:800px;background:linear-gradient(90deg,var(--gold) 0%,rgba(229,166,60,.12) 65%,transparent 100%);pointer-events:none}
+.meta-row select{flex:1;min-width:170px;max-width:280px}
+/* ================= MOBIL ================= */
+@media(max-width:900px){
+  .cols{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .wrap{padding:0 12px 90px}
+  input,select,textarea{font-size:16px;padding:10px}
+  .btn{padding:11px 15px}
+  .btn.small{padding:8px 12px;font-size:13px}
+  header.top .btn{flex:1}
+  .logo{width:100%;justify-content:center;margin-bottom:4px}
+  .grid{grid-template-columns:1fr}
+  .name-input{font-size:19px;min-width:140px}
+  .meta-row input{max-width:none}
+  /* statbar: rácsba tördelve, nem görgetve */
+  .statbar{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}
+  .stat{border-right:none;border-bottom:1px solid var(--border);min-width:0;padding:10px 12px}
+  .stat.color-stat{grid-column:1/-1;justify-content:flex-start}
+  .statbar .stat:nth-last-child(-n+2){border-bottom:none}
+  /* sorok: név felül, számmezők alatta címkével */
+  .irow{grid-template-columns:repeat(6,1fr) !important;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;gap:8px}
+  .irow input,.irow select{background:var(--panel)}
+  .fld-name{grid-column:span 5}
+  .fld-rm{grid-column:span 1;align-items:flex-end}
+  .fld-rm button{font-size:20px;padding:8px 12px}
+  .fld{grid-column:span 2}
+  .fld-w3{grid-column:span 3}
+  .flab{display:flex !important;font-size:10px}
+  .calcv{text-align:left;padding:10px 2px}
+  .kv{grid-template-columns:1fr 130px}
+}
+@media(max-width:640px){
+  .hname{width:80px}
+  .hval{width:auto}
+  .slab{width:50px;font-size:10px}
+  .meta-row select{max-width:none}
+  .statbar::after{min-width:0}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h9v3h2.5A2.5 2.5 0 0 1 20 9.5v4A2.5 2.5 0 0 1 17.5 16H15v4H6V4Z" stroke="currentColor" stroke-width="1.8"/><path d="M15 8.5h2.2a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H15" stroke="currentColor" stroke-width="1.4"/><path d="M9 8v9M12 8v9" stroke="currentColor" stroke-width="1.4" opacity=".6"/></svg>
+      Főzde <small>recepttervező</small>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="btn-export" title="Az összes recept mentése JSON fájlba">Mentés fájlba</button>
+    <button class="btn ghost" id="btn-import">Betöltés fájlból</button>
+    <button class="btn" id="btn-settings">⚙ Felszerelés</button>
+  </header>
+  <main id="app"></main>
+</div>
+<input type="file" id="import-file" accept=".json" style="display:none">
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= adat / állandók ================= */
+
+const DEFAULT_SETTINGS = {
+  batchL: 21, boilMin: 30, brewhouseEff: 70, mashEff: 80,
+  boiloffLph: 3.5, kettleLossL: 4, absorpLkg: 0.55, deadspaceL: 0.75,
+  mashThickness: 4.4
+};
+
+const MALTS = [
+  ["Pale Malt, Maris Otter",5,82],["Pilsner (Weyermann)",3.5,81],["Pale Ale (Weyermann)",6,81],
+  ["Extra Pale (Golden Promise)",4,82],["Munich I (Weyermann)",14,80],["Munich II (Weyermann)",21,80],
+  ["Vienna (Weyermann)",8,80],["Wheat Malt, Pale (Weyermann)",4,82],["Carapils/Carafoam",4,75],
+  ["CaraHell",25,75],["CaraMunich II",120,74],["CaraMunich III",150,74],["Crystal 60L",118,74],
+  ["Zabpehely (flaked oats)",2,70],["Búzapehely (flaked wheat)",2,72],["Rizspehely",1,70],
+  ["Melanoidin",70,75],["Chocolate Malt",900,68],["Carafa Special II",830,70],["Roasted Barley",1200,68],
+  ["Acidulated (savanyú maláta)",4,60],["Dextróz (cukor)",0,100],["Nádcukor",0,100],["Laktóz",0,76]
+];
+const HOPS = [
+  ["Citra",12],["Mosaic",11.5],["Galaxy",15],["Strata",12.5],["Simcoe",13],["Amarillo",9],
+  ["Centennial",10],["Cascade",6.5],["Chinook",13],["Columbus/CTZ",15],["Nelson Sauvin",12],
+  ["El Dorado",14],["Idaho 7",13],["Sabro",15],["Motueka",7],["Riwaka",5.5],["Vic Secret",15.5],
+  ["Magnum",13],["Perle",8],["Saaz",3.5],["Hallertau Mittelfrüh",4],["Tettnang",4.5],
+  ["Styrian Golding",5],["East Kent Golding",5.5],["Fuggle",4.5]
+];
+const YEASTS = [
+  ["SafAle US-05",78],["Verdant IPA (Lallemand)",78],["SafAle S-04",75],["SafAle K-97",78],
+  ["SafLager W-34/70",82],["SafLager S-189",81],["SafAle BE-134 (saison)",89],["SafAle BE-256 (Abbaye)",82],
+  ["SafAle T-58",75],["WLP001 California Ale",76],["Wyeast 1318 London Ale III",74],
+  ["Omega OYL-071 Lutra Kveik",82],["Omega OYL-057 Hothead Kveik",80],["Lallemand Voss Kveik",80],
+  ["Lallemand New England",77],["Imperial A24 Dry Hop",76]
+];
+const HOP_USES = [["boil","Forralás"],["hopstand","Hopstand"],["dry","Szárazkomló"]];
+const MISC_WHEN = ["Cefrézés","Forralás","Whirlpool","Erjesztés","Palackozás/Hordó"];
+
+/* BJCP 2021 stílus-tartományok: id, név, ABV, OG, FG, IBU, EBC (min-max) */
+const STYLES = [
+["21B","New England IPA",6.0,9.0,1.060,1.085,1.010,1.015,25,60,5.9,13.8],
+["21A","American IPA",5.5,7.5,1.056,1.070,1.008,1.014,40,70,11.8,27.6],
+["22A","Double IPA",7.5,10.0,1.065,1.085,1.008,1.018,60,100,11.8,27.6],
+["18B","American Pale Ale",4.5,6.2,1.045,1.060,1.010,1.015,30,50,9.9,19.7],
+["18A","Blonde Ale",3.8,5.5,1.038,1.054,1.008,1.013,15,28,5.9,11.8],
+["19A","American Amber Ale",4.5,6.2,1.045,1.060,1.010,1.015,25,40,19.7,33.5],
+["2A","German Pils",4.4,5.2,1.044,1.050,1.008,1.013,22,40,3.9,7.9],
+["4A","Munich Helles",4.7,5.4,1.044,1.048,1.006,1.012,16,22,5.9,9.9],
+["3B","Czech Premium Pale Lager",4.2,5.8,1.044,1.060,1.013,1.017,30,45,6.9,11.8],
+["7A","Vienna Lager",4.7,5.5,1.048,1.055,1.010,1.014,18,30,17.7,29.6],
+["5B","K\u00f6lsch",4.4,5.2,1.044,1.050,1.007,1.011,18,30,6.9,9.9],
+["10A","Weissbier",4.3,5.6,1.044,1.053,1.008,1.014,8,15,3.9,11.8],
+["24A","Witbier",4.5,5.5,1.044,1.052,1.008,1.012,8,20,3.9,7.9],
+["25B","Saison",5.0,7.0,1.048,1.065,1.002,1.008,20,35,9.9,27.6],
+["25A","Belgian Blond Ale",6.0,7.5,1.062,1.075,1.008,1.018,15,30,7.9,13.8],
+["26B","Belgian Dubbel",6.3,7.6,1.062,1.075,1.008,1.018,15,25,19.7,33.5],
+["26C","Belgian Tripel",7.5,9.5,1.075,1.085,1.008,1.014,20,40,8.9,13.8],
+["26D","Belgian Dark Strong Ale",8.0,12.0,1.075,1.110,1.010,1.024,20,35,23.6,43.3],
+["20A","American Porter",4.8,6.5,1.050,1.070,1.012,1.018,25,50,43.3,78.8],
+["16A","Sweet Stout",4.0,6.0,1.044,1.060,1.012,1.024,20,40,59.1,78.8],
+["20C","Imperial Stout",8.0,12.0,1.075,1.115,1.018,1.030,50,90,59.1,78.8]
+];
+
+function icon(n){
+  const p={
+    grain:'M12 3v18M12 8l4-3M12 8 8 5M12 13l4.5-3M12 13 7.5 10M12 18l4.5-3M12 18l-4.5-3',
+    hop:'M12 3c3.5 2 6 5 6 9 0 4.5-3 8-6 9-3-1-6-4.5-6-9 0-4 2.5-7 6-9ZM12 8v9M12 11.5l3-2M12 11.5l-3-2M12 15l3-2M12 15l-3-2',
+    flask:'M9.5 3h5M10.5 3v5l-5 9a2.5 2.5 0 0 0 2.2 3.7h8.6A2.5 2.5 0 0 0 18.5 17l-5-9V3M7.5 15.5h9',
+    thermo:'M11 4a2 2 0 0 1 4 0v9.5a4 4 0 1 1-4 0V4ZM13 9v7',
+    drop:'M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z',
+    bubbles:'M8 13.5a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4ZM17 9.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM14 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z',
+    jar:'M8 7.5h8V20a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 8 20V7.5ZM7 7.5h10M9.5 4h5v3.5h-5zM8 13h8',
+    sliders:'M4 8h10M18 8h2M15 6v4M4 16h3M11 16h9M8 14v4',
+    pencil:'M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1ZM14 6l4 4',
+    book:'M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21V5.5Z'
+  }[n];
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="${p}"/></svg>`;
+}
+
+const SRM_HEX = ["#FFE699","#FFD878","#FFCA5A","#FFBF42","#FBB123","#F8A600","#F39C00","#EA8F00","#E58500","#DE7C00","#D77200","#CF6900","#CB6200","#C35900","#BB5100","#B54C00","#B04500","#A63E00","#A13700","#9B3200","#952D00","#8E2900","#882300","#821E00","#7B1A00","#771900","#701400","#6A0E00","#660D00","#5E0B00","#5A0A02","#560A05","#520907","#4C0505","#470606","#440607","#3F0708","#3B0607","#370607","#2D0607"];
+function ebcHex(ebc){ const srm = Math.max(1, Math.min(40, Math.round(ebc/1.97))); return SRM_HEX[srm-1]; }
+
+/* ================= tároló ================= */
+let recipes = [];
+let settings = {...DEFAULT_SETTINGS};
+let storageOk = true;
+
+/* mentés: először a Claude-tároló, ha az nincs vagy hibázik, a böngésző saját tárolója */
+async function storGet(k){
+  try{
+    if(typeof window!=='undefined' && window.storage && window.storage.get){
+      const r = await window.storage.get(k);
+      if(r && r.value!=null) return r.value;
+    }
+  }catch(e){ /* nincs ilyen kulcs vagy nem elérhető — próbáljuk a következőt */ }
+  try{ return localStorage.getItem(k); }catch(e){ return null; }
+}
+async function storSet(k,v){
+  try{
+    if(typeof window!=='undefined' && window.storage && window.storage.set){
+      const r = await window.storage.set(k,v);
+      if(r) return true;
+    }
+  }catch(e){}
+  try{ localStorage.setItem(k,v); return true; }catch(e){}
+  return false;
+}
+async function loadAll(){
+  try{
+    const r = await storGet('fozde-recipes'); if(r) recipes = JSON.parse(r);
+    const s = await storGet('fozde-settings'); if(s) settings = {...DEFAULT_SETTINGS, ...JSON.parse(s)};
+  }catch(e){ storageOk=false; }
+}
+let saveTimer=null;
+function scheduleSave(){
+  setSaveState('…');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveAll, 700);
+}
+async function saveAll(){
+  const ok1 = await storSet('fozde-recipes', JSON.stringify(recipes));
+  const ok2 = await storSet('fozde-settings', JSON.stringify(settings));
+  setSaveState(ok1 && ok2 ? 'Mentve' : 'Mentés sikertelen');
+}
+function setSaveState(t){ const el=document.getElementById('save-state'); if(el) el.textContent=t; }
+
+/* ================= számítások ================= */
+const sgToPlato = sg => -616.868 + 1111.14*sg - 630.272*sg*sg + 135.997*sg*sg*sg;
+
+function calc(r){
+  const g = r.equip;
+  const grains = r.fermentables.filter(f=>+f.amount>0);
+  const totalKg = grains.reduce((s,f)=>s + (+f.amount||0),0);
+  let ptsBH = 0, ptsMash = 0, mcu = 0;
+  for(const f of grains){
+    const kg=+f.amount||0, pot=(+f.potential||80)/100, ebc=+f.ebc||0;
+    const raw = kg * pot * 383.89;
+    const isSugar = pot>=0.96; /* cukorfélékre nincs hatásfok */
+    ptsBH += raw * (isSugar ? 1 : g.brewhouseEff/100);
+    ptsMash += raw * (isSugar ? 1 : g.mashEff/100);
+    mcu += kg * (ebc/1.97) * 8.3454;
+  }
+  /* OG az erjesztőben: főzőházi hatásfok */
+  const og = 1 + (ptsBH / Math.max(g.batchL,0.1)) / 1000;
+  mcu = mcu / Math.max(g.batchL,0.1);
+  const srm = mcu>0 ? 1.4922*Math.pow(mcu,0.6859) : 0;
+  const ebc = srm*1.97;
+  const preBoilL = g.batchL + g.boiloffLph*(g.boilMin/60) + g.kettleLossL;
+  const totalWater = preBoilL + totalKg*g.absorpLkg + g.deadspaceL;
+  let mashWater = Math.min(totalKg*g.mashThickness, totalWater);
+  if(totalKg===0) mashWater = 0;
+  const spargeWater = Math.max(totalWater - mashWater, 0);
+  const mashVol = mashWater + totalKg*0.67;
+  /* forralás előtti gravity: cefre-hatásfok a forralás előtti térfogatra */
+  const preBoilOg = 1 + (ptsMash / Math.max(preBoilL,0.1))/1000;
+  const att = r.yeasts.length ? Math.max(...r.yeasts.map(y=>+y.attenuation||75)) : 75;
+  const fg = og - (og-1)*(att/100);
+  const abv = (og-fg)*131.25;
+  let ibu = 0;
+  const hopRows = r.hops.map(h=>{
+    const gr=+h.amount||0, aa=(+h.alpha||0)/100;
+    let hIbu = 0;
+    if(h.use!=='dry' && gr>0 && aa>0){
+      const t = +h.time||0;
+      const bigness = 1.65*Math.pow(0.000125, og-1);
+      const timeF = (1-Math.exp(-0.04*t))/4.15;
+      let util = bigness*timeF;
+      if(h.use==='hopstand'){
+        const temp = +r.hopstandTemp||80;
+        util *= Math.exp(-0.076*(100-Math.min(temp,100)));
+      }
+      hIbu = aa*gr*1000/Math.max(g.batchL,0.1)*util;
+    }
+    ibu += hIbu;
+    return hIbu;
+  });
+  const totalHopG = r.hops.reduce((s,h)=>s+(+h.amount||0),0);
+  const dryHopG = r.hops.filter(h=>h.use==='dry').reduce((s,h)=>s+(+h.amount||0),0);
+  const oe=sgToPlato(og), ae=sgToPlato(fg);
+  const re = 0.1808*oe + 0.8192*ae;
+  const abw = abv*0.789/fg;
+  const carbs100 = Math.max(re*fg,0);
+  const kcal100 = Math.max(abw*7 + carbs100*4, 0)*fg;
+  const bugu = og>1 ? ibu/((og-1)*1000) : 0;
+  return {og,fg,abv,ibu,ebc,srm,bugu,totalKg,totalHopG,dryHopG,preBoilL,preBoilOg,
+          totalWater,mashWater,spargeWater,mashVol,att,hopRows,kcal100,carbs100};
+}
+const fmtSg = v => v.toFixed(3);
+const fmt1 = v => (Math.round(v*10)/10).toLocaleString('hu-HU');
+const fmt2 = v => (Math.round(v*100)/100).toLocaleString('hu-HU');
+
+/* ================= recept-műveletek ================= */
+function newRecipe(){
+  return {
+    id: 'r'+Date.now()+Math.random().toString(36).slice(2,6),
+    name: 'Új recept', style: '21B New England IPA', styleId: '21B', author: 'Sörfőzés Albert Szabival',
+    created: Date.now(),
+    equip: {...settings},
+    hopstandTemp: 80,
+    carbonation: 2.4,
+    fermentables: [], hops: [], yeasts: [], misc: [],
+    mashSteps: [{name:'Cefrézés',temp:66,time:60},{name:'Kicefrézés',temp:75,time:10}],
+    fermSteps: [{name:'Főerjesztés',temp:20,days:10}],
+    notes: ''
+  };
+}
+
+/* ================= nézetek ================= */
+const app = document.getElementById('app');
+let view = {name:'list'};
+
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+function glassSvg(hex, h=64){
+  return `<svg class="glass" width="${h*0.7}" height="${h}" viewBox="0 0 44 64">
+    <path d="M8 6 L36 6 L33 58 A4 4 0 0 1 29 61 L15 61 A4 4 0 0 1 11 58 Z" fill="${hex}" stroke="#00000055"/>
+    <path d="M8 6 L36 6 L35.4 15 L8.6 15 Z" fill="#F6EBD3" opacity="0.9"/>
+    <path d="M12 18 L14 52" stroke="#FFFFFF33" stroke-width="3" stroke-linecap="round" fill="none"/>
+  </svg>`;
+}
+
+function renderList(){
+  const cards = recipes
+    .slice().sort((a,b)=>b.created-a.created)
+    .map(r=>{
+      const c = calc(r);
+      return `<div class="card" data-open="${r.id}">
+        ${glassSvg(ebcHex(c.ebc))}
+        <div class="body">
+          <h3>${esc(r.name)}</h3>
+          <div class="style">${esc(r.style||'—')}</div>
+          <div class="chip-row">
+            <span class="chip"><b>${c.abv.toFixed(1)}%</b></span>
+            <span class="chip">OG <b>${fmtSg(c.og)}</b></span>
+            <span class="chip">IBU <b>${Math.round(c.ibu)}</b></span>
+            <span class="chip">EBC <b>${fmt1(c.ebc)}</b></span>
+            <span class="chip"><b>${r.equip.batchL}</b> L</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  app.innerHTML = `
+    <div class="list-head">
+      <h1>Receptek</h1>
+      <span class="count">${recipes.length} db</span>
+      <div class="spacer"></div>
+      <button class="btn primary" id="btn-new">+ Új recept</button>
+    </div>
+    ${recipes.length ? `<div class="grid">${cards}</div>` :
+      `<div class="empty"><strong>Még nincs recepted.</strong><p>Kattints az „Új recept” gombra — a felszerelés (B40, 21 L) alapból be van állítva.</p></div>`}
+  `;
+  document.getElementById('btn-new').onclick = ()=>{
+    const r = newRecipe(); recipes.push(r); scheduleSave();
+    view={name:'edit', id:r.id}; render();
+  };
+  app.querySelectorAll('[data-open]').forEach(el=>{
+    el.onclick = ()=>{ view={name:'edit', id:el.dataset.open}; render(); };
+  });
+}
+
+/* ---------- mező-építők ---------- */
+function fld(label, inner, cls=''){
+  return `<div class="fld ${cls}"><span class="flab">${label}</span>${inner}</div>`;
+}
+function rmBtn(path){
+  return `<div class="fld fld-rm"><span class="flab">&nbsp;</span><button data-rm="${path}" title="törlés">×</button></div>`;
+}
+
+function rowsHtml(r,c){
+  const fRows = r.fermentables.map((f,i)=>{
+    const pct = c.totalKg>0 ? ((+f.amount||0)/c.totalKg*100) : 0;
+    return `<div class="irow" style="--cols:1fr 74px 66px 66px 56px 30px">
+      ${fld('Maláta',`<input list="malts" data-f="fermentables.${i}.name" value="${esc(f.name)}" placeholder="maláta neve">`,'fld-name')}
+      ${fld('kg',`<input type="number" step="0.05" inputmode="decimal" data-f="fermentables.${i}.amount" value="${f.amount}">`)}
+      ${fld('EBC',`<input type="number" step="0.5" inputmode="decimal" data-f="fermentables.${i}.ebc" value="${f.ebc}">`)}
+      ${fld('Kiv. %',`<input type="number" step="1" inputmode="numeric" data-f="fermentables.${i}.potential" value="${f.potential}">`)}
+      ${fld('Arány',`<div class="calcv">${pct.toFixed(1)}%</div>`)}
+      ${rmBtn('fermentables.'+i)}
+    </div>`;
+  }).join('');
+  const hRows = r.hops.map((h,i)=>`<div class="irow" style="--cols:1fr 62px 62px 116px 62px 66px 30px">
+      ${fld('Komló',`<input list="hops" data-f="hops.${i}.name" value="${esc(h.name)}" placeholder="komló neve">`,'fld-name')}
+      ${fld('g',`<input type="number" step="1" inputmode="decimal" data-f="hops.${i}.amount" value="${h.amount}">`)}
+      ${fld('α %',`<input type="number" step="0.1" inputmode="decimal" data-f="hops.${i}.alpha" value="${h.alpha}">`)}
+      ${fld('Mikor',`<select data-f="hops.${i}.use">${HOP_USES.map(([v,l])=>`<option value="${v}" ${h.use===v?'selected':''}>${l}</option>`).join('')}</select>`,'fld-w3')}
+      ${fld(h.use==='dry'?'Nap':'Perc',`<input type="number" step="1" inputmode="numeric" data-f="hops.${i}.time" value="${h.time}">`)}
+      ${fld('IBU',`<div class="calcv">${h.use==='dry' ? '—' : c.hopRows[i].toFixed(1)}</div>`)}
+      ${rmBtn('hops.'+i)}
+    </div>`).join('');
+  const yRows = r.yeasts.map((y,i)=>`<div class="irow" style="--cols:1fr 74px 90px 30px">
+      ${fld('Élesztő',`<input list="yeasts" data-f="yeasts.${i}.name" value="${esc(y.name)}" placeholder="élesztő neve">`,'fld-name')}
+      ${fld('Csomag',`<input type="number" step="1" inputmode="numeric" data-f="yeasts.${i}.amount" value="${y.amount}">`)}
+      ${fld('Lekötés %',`<input type="number" step="1" inputmode="numeric" data-f="yeasts.${i}.attenuation" value="${y.attenuation}">`,'fld-w3')}
+      ${rmBtn('yeasts.'+i)}
+    </div>`).join('');
+  const mRows = r.misc.map((m,i)=>`<div class="irow" style="--cols:1fr 100px 140px 30px">
+      ${fld('Név',`<input data-f="misc.${i}.name" value="${esc(m.name)}" placeholder="pl. gipsz, Whirlfloc">`,'fld-name')}
+      ${fld('Mennyiség',`<input data-f="misc.${i}.amount" value="${esc(m.amount)}" placeholder="pl. 5 g">`,'fld-w3')}
+      ${fld('Mikor',`<select data-f="misc.${i}.when">${MISC_WHEN.map(w=>`<option ${m.when===w?'selected':''}>${w}</option>`).join('')}</select>`,'fld-w3')}
+      ${rmBtn('misc.'+i)}
+    </div>`).join('');
+  const msRows = r.mashSteps.map((s,i)=>`<div class="irow" style="--cols:1fr 74px 74px 30px">
+      ${fld('Lépés',`<input data-f="mashSteps.${i}.name" value="${esc(s.name)}">`,'fld-name')}
+      ${fld('°C',`<input type="number" step="0.5" inputmode="decimal" data-f="mashSteps.${i}.temp" value="${s.temp}">`)}
+      ${fld('Perc',`<input type="number" step="5" inputmode="numeric" data-f="mashSteps.${i}.time" value="${s.time}">`)}
+      ${rmBtn('mashSteps.'+i)}
+    </div>`).join('');
+  const fsRows = r.fermSteps.map((s,i)=>`<div class="irow" style="--cols:1fr 74px 74px 30px">
+      ${fld('Szakasz',`<input data-f="fermSteps.${i}.name" value="${esc(s.name)}">`,'fld-name')}
+      ${fld('°C',`<input type="number" step="0.5" inputmode="decimal" data-f="fermSteps.${i}.temp" value="${s.temp}">`)}
+      ${fld('Nap',`<input type="number" step="1" inputmode="numeric" data-f="fermSteps.${i}.days" value="${s.days}">`)}
+      ${rmBtn('fermSteps.'+i)}
+    </div>`).join('');
+  return {fRows,hRows,yRows,mRows,msRows,fsRows};
+}
+
+function statbarHtml(c){
+  return `
+    <div class="stat color-stat">${glassSvg(ebcHex(c.ebc),46)}<div><div class="lab">Szín</div><div class="val">${fmt1(c.ebc)} <small>EBC</small></div></div></div>
+    <div class="stat"><div class="lab">ABV</div><div class="val">${c.abv.toFixed(1)}<small>%</small></div></div>
+    <div class="stat"><div class="lab">OG</div><div class="val">${fmtSg(c.og)}</div></div>
+    <div class="stat"><div class="lab">FG</div><div class="val">${fmtSg(c.fg)}</div></div>
+    <div class="stat"><div class="lab">IBU</div><div class="val">${Math.round(c.ibu)}</div></div>
+    <div class="stat"><div class="lab">BU/GU</div><div class="val">${c.bugu.toFixed(2)}</div></div>
+    <div class="stat"><div class="lab">Forralás előtti</div><div class="val">${fmtSg(c.preBoilOg)}</div></div>
+    <div class="stat"><div class="lab">Kalória</div><div class="val">${Math.round(c.kcal100)}<small> kcal/100 ml</small></div></div>
+    <div class="stat"><div class="lab">Szénhidrát</div><div class="val">${c.carbs100.toFixed(1)}<small> g/100 ml</small></div></div>`;
+}
+function waterHtml(c){
+  return `
+      <span class="wl">Cefrevíz</span><span class="wv">${fmt2(c.mashWater)} L</span>
+      <span class="wl">Csurgatóvíz</span><span class="wv">${fmt2(c.spargeWater)} L</span>
+      <span class="wl">Összes víz</span><span class="wv">${fmt2(c.totalWater)} L</span>
+      <span class="wl">Cefre térfogat (víz + maláta)</span><span class="wv">${fmt2(c.mashVol)} L</span>
+      <span class="wl">Forralás előtti térfogat</span><span class="wv">${fmt2(c.preBoilL)} L</span>`;
+}
+
+function styleRow(label,val,lo,hi,fmt){
+  const span=(hi-lo)||Math.abs(hi)*0.1||1;
+  const pad=0.18;
+  const rlo=lo-span*pad, rhi=hi+span*pad;
+  let pct=(val-rlo)/(rhi-rlo)*100;
+  const inR=val>=lo-1e-9&&val<=hi+1e-9;
+  pct=Math.max(1,Math.min(99,pct));
+  const gLeft=pad/(1+2*pad)*100, gW=100/(1+2*pad);
+  return `<div class="srow">
+    <span class="slab${inR?'':' out'}">${label}</span>
+    <div class="sbar">
+      <div class="sfill" style="left:${gLeft.toFixed(2)}%;width:${gW.toFixed(2)}%"><span>${fmt(lo)}</span><span>${fmt(hi)}</span></div>
+      <div class="smark" style="left:${pct.toFixed(2)}%"></div>
+      <span class="scur${pct>72?' flip':''}" style="left:${pct.toFixed(2)}%">${fmt(val)}</span>
+    </div>
+  </div>`;
+}
+function styleGuideRows(r,c){
+  const st=STYLES.find(s=>s[0]===r.styleId);
+  if(!st) return '';
+  const a1=st[2],a2=st[3],o1=st[4],o2=st[5],f1=st[6],f2=st[7],i1=st[8],i2=st[9],e1=st[10],e2=st[11];
+  return styleRow('ABV',c.abv,a1,a2,v=>v.toFixed(1)+'%')
+   + styleRow('OG',c.og,o1,o2,fmtSg)
+   + styleRow('FG',c.fg,f1,f2,fmtSg)
+   + styleRow('EBC',c.ebc,e1,e2,v=>fmt1(v))
+   + styleRow('IBU',c.ibu,i1,i2,v=>String(Math.round(v)))
+   + styleRow('BU/GU',c.bugu,i1/((o2-1)*1000),i2/((o1-1)*1000),v=>v.toFixed(2));
+}
+function styleGuideHtml(r,c){
+  const st=STYLES.find(s=>s[0]===r.styleId);
+  if(!st) return '';
+  return `<div class="panel style-panel"><div class="ph">${icon('book')}<h2>Stíluskalauz — ${st[0]} ${st[1]}</h2></div>
+    <div class="pb" id="styleguide-body">${styleGuideRows(r,c)}</div></div>`;
+}
+function maltBarHtml(r,c){
+  if(!c.totalKg) return '';
+  return r.fermentables.filter(f=>+f.amount>0).map(f=>{
+    const pct=(+f.amount)/c.totalKg*100;
+    return `<div class="mseg" style="width:${pct}%;background:${ebcHex(+f.ebc||0)}" title="${esc(f.name)} — ${pct.toFixed(1)}%"></div>`;
+  }).join('');
+}
+function hopChartHtml(r,c){
+  const hs=r.hops.filter(h=>+h.amount>0);
+  if(!hs.length) return '';
+  const max=Math.max(...hs.map(h=>+h.amount));
+  const useColor={boil:'#94A85A',hopstand:'#E5A63C',dry:'#7FA8C9'};
+  const useLab={boil:'forralás',hopstand:'hopstand',dry:'szárazkomló'};
+  const rows=hs.map(h=>{
+    const w=Math.max((+h.amount)/max*100,4);
+    const t=h.use==='dry'?((+h.time||0)+' nap'):((+h.time||0)+' perc');
+    return `<div class="hrow2"><span class="hname">${esc(h.name)||'—'}</span>
+      <div class="htrack"><div class="hfill" style="width:${w}%;background:${useColor[h.use]||'#94A85A'}"></div></div>
+      <span class="hval">${+h.amount} g · ${t}</span></div>`;
+  }).join('');
+  const legend=`<div class="hlegend">${Object.keys(useColor).map(k=>`<span><i style="background:${useColor[k]}"></i>${useLab[k]}</span>`).join('')}</div>`;
+  return `<div class="hopchart">${rows}${legend}</div>`;
+}
+
+function renderEdit(){
+  const r = recipes.find(x=>x.id===view.id);
+  if(!r){ view={name:'list'}; return renderList(); }
+  if(r.styleId===undefined){
+    const hit = STYLES.find(s=>String(r.style||'').toUpperCase().startsWith(s[0]));
+    r.styleId = hit ? hit[0] : '';
+    if(hit) r.style = hit[0]+' '+hit[1];
+  }
+  const c = calc(r);
+  const R = rowsHtml(r,c);
+  app.innerHTML = `
+  <div class="ed-top">
+    <button class="btn ghost" id="btn-back">← Receptek</button>
+    <input class="name-input" data-f="name" value="${esc(r.name)}">
+    <span class="save-state" id="save-state"></span>
+    <button class="btn small" id="btn-dup">Duplikálás</button>
+    <button class="btn small danger" id="btn-del">Törlés</button>
+  </div>
+  <div class="meta-row">
+    <select id="style-select">
+      <option value="">— egyéni stílus —</option>
+      ${STYLES.map(s=>`<option value="${s[0]}" ${r.styleId===s[0]?'selected':''}>${s[0]} ${s[1]}</option>`).join('')}
+    </select>
+    ${r.styleId?'':`<input data-f="style" value="${esc(r.style)}" placeholder="stílus neve">`}
+    <input data-f="author" value="${esc(r.author)}" placeholder="szerző">
+  </div>
+  <div class="statbar">${statbarHtml(c)}</div>
+  ${styleGuideHtml(r,c)}
+  <div class="cols">
+    <div>
+      <div class="panel"><div class="ph">${icon('grain')}<h2>Maláták</h2><span class="sum">${fmt2(c.totalKg)} kg</span></div>
+        <div class="pb">
+          <div class="maltbar" id="maltbar">${maltBarHtml(r,c)}</div>
+          <div class="rows">${R.fRows}</div>
+          <button class="btn small addrow" data-add="fermentables">+ Maláta</button>
+        </div>
+      </div>
+      <div class="panel"><div class="ph">${icon('flask')}<h2>Élesztő</h2><span class="sum">lekötés: ${c.att}%</span></div>
+        <div class="pb">
+          <div class="rows">${R.yRows}</div>
+          <button class="btn small addrow" data-add="yeasts">+ Élesztő</button>
+        </div>
+      </div>
+      <div class="panel"><div class="ph">${icon('thermo')}<h2>Cefrézés</h2></div>
+        <div class="pb">
+          <div class="rows">${R.msRows}</div>
+          <button class="btn small addrow" data-add="mashSteps">+ Lépés</button>
+        </div>
+      </div>
+      <div class="panel"><div class="ph">${icon('drop')}<h2>Víz</h2></div>
+        <div class="pb water-grid">${waterHtml(c)}</div>
+      </div>
+    </div>
+    <div>
+      <div class="panel"><div class="ph">${icon('hop')}<h2>Komlók</h2><span class="sum">${Math.round(c.totalHopG)} g · szárazk. ${(c.dryHopG/r.equip.batchL).toFixed(2)} g/L</span></div>
+        <div class="pb">
+          <div class="rows">${R.hRows}</div>
+          <button class="btn small addrow" data-add="hops">+ Komló</button>
+          <div id="hopchart">${hopChartHtml(r,c)}</div>
+          <div class="kv" style="margin-top:12px;max-width:300px">
+            <label>Hopstand hőmérséklet</label>
+            <div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="hopstandTemp" value="${r.hopstandTemp}"><span>°C</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="ph">${icon('bubbles')}<h2>Erjesztés</h2></div>
+        <div class="pb">
+          <div class="rows">${R.fsRows}</div>
+          <button class="btn small addrow" data-add="fermSteps">+ Szakasz</button>
+          <div class="kv" style="margin-top:12px;max-width:300px">
+            <label>Szénsav</label>
+            <div class="unit-in"><input type="number" step="0.1" inputmode="decimal" data-f="carbonation" value="${r.carbonation}"><span>CO₂ vol</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel"><div class="ph">${icon('jar')}<h2>Egyéb hozzávalók</h2></div>
+        <div class="pb">
+          <div class="rows">${R.mRows}</div>
+          <button class="btn small addrow" data-add="misc">+ Hozzávaló</button>
+        </div>
+      </div>
+      <div class="panel"><div class="ph">${icon('sliders')}<h2>Főzet beállításai</h2></div>
+        <div class="pb kv">
+          <label>Adag térfogata</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" data-f="equip.batchL" value="${r.equip.batchL}"><span>L</span></div>
+          <label>Forralás</label><div class="unit-in"><input type="number" step="5" inputmode="numeric" data-f="equip.boilMin" value="${r.equip.boilMin}"><span>perc</span></div>
+          <label>Főzőházi hatásfok</label><div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="equip.brewhouseEff" value="${r.equip.brewhouseEff}"><span>%</span></div>
+          <label>Cefre-hatásfok</label><div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="equip.mashEff" value="${r.equip.mashEff}"><span>%</span></div>
+        </div>
+        <div class="hint" style="padding:0 14px 14px">A párolgás, veszteségek és vízarányok a ⚙ Felszerelés alatt állíthatók — azok minden új receptre érvényesek.</div>
+      </div>
+      <div class="panel"><div class="ph">${icon('pencil')}<h2>Jegyzetek</h2></div>
+        <div class="pb"><textarea data-f="notes" placeholder="főzési jegyzetek, tapasztalatok…">${esc(r.notes)}</textarea></div>
+      </div>
+    </div>
+  </div>
+  <datalist id="malts">${MALTS.map(m=>`<option value="${esc(m[0])}">`).join('')}</datalist>
+  <datalist id="hops">${HOPS.map(h=>`<option value="${esc(h[0])}">`).join('')}</datalist>
+  <datalist id="yeasts">${YEASTS.map(y=>`<option value="${esc(y[0])}">`).join('')}</datalist>
+  `;
+  wireEdit(r);
+  setSaveState('Mentve');
+}
+
+function setPath(obj, path, val){
+  const parts = path.split('.');
+  let o = obj;
+  for(let i=0;i<parts.length-1;i++) o = o[parts[i]];
+  o[parts[parts.length-1]] = val;
+}
+
+function wireEdit(r){
+  document.getElementById('btn-back').onclick = ()=>{ view={name:'list'}; render(); };
+  document.getElementById('btn-dup').onclick = ()=>{
+    const copy = JSON.parse(JSON.stringify(r));
+    copy.id = 'r'+Date.now(); copy.created = Date.now(); copy.name = r.name+' (másolat)';
+    recipes.push(copy); scheduleSave(); view={name:'edit',id:copy.id}; render();
+    toast('Recept duplikálva');
+  };
+  document.getElementById('btn-del').onclick = ()=>{
+    if(confirm(`Biztos törlöd a(z) „${r.name}” receptet?`)){
+      recipes = recipes.filter(x=>x.id!==r.id); scheduleSave(); view={name:'list'}; render();
+      toast('Recept törölve');
+    }
+  };
+  const styleSel = document.getElementById('style-select');
+  if(styleSel){
+    styleSel.addEventListener('change', ()=>{
+      const id = styleSel.value;
+      r.styleId = id;
+      if(id){ const st=STYLES.find(s=>s[0]===id); r.style = st[0]+' '+st[1]; }
+      scheduleSave(); renderEdit();
+    });
+  }
+  app.querySelectorAll('[data-f]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      const isNum = inp.type==='number';
+      setPath(r, inp.dataset.f, isNum ? (inp.value===''?'':+inp.value) : inp.value);
+      autoFill(r, inp);
+      scheduleSave();
+      refreshCalcOnly(r);
+    });
+    inp.addEventListener('change', ()=>{
+      /* mobil billentyűzetnél a change minden fókuszvesztésre lefut —
+         csak akkor rajzolunk újra, ha tényleg kell (select, preset-név) */
+      if(inp.tagName==='SELECT' || /\.name$/.test(inp.dataset.f)) renderEdit();
+      else refreshRowCalcs(r);
+    });
+  });
+  app.querySelectorAll('[data-rm]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const [arr,idx] = btn.dataset.rm.split('.');
+      r[arr].splice(+idx,1); scheduleSave(); renderEdit();
+    };
+  });
+  app.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const a = btn.dataset.add;
+      if(a==='fermentables') r.fermentables.push({name:'',amount:'',ebc:4,potential:81});
+      if(a==='hops') r.hops.push({name:'',amount:'',alpha:12,use:'boil',time:10});
+      if(a==='yeasts') r.yeasts.push({name:'',amount:1,attenuation:78});
+      if(a==='misc') r.misc.push({name:'',amount:'',when:'Forralás'});
+      if(a==='mashSteps') r.mashSteps.push({name:'Lépés',temp:66,time:15});
+      if(a==='fermSteps') r.fermSteps.push({name:'Szakasz',temp:20,days:3});
+      scheduleSave(); renderEdit();
+      const inputs = app.querySelectorAll(`[data-f^="${a}."][data-f$=".name"]`);
+      if(inputs.length) inputs[inputs.length-1].focus();
+    };
+  });
+}
+
+function autoFill(r, inp){
+  const p = inp.dataset.f;
+  const m = p.match(/^(fermentables|hops|yeasts)\.(\d+)\.name$/);
+  if(!m) return;
+  const arr=m[1], idx=m[2];
+  const name = inp.value;
+  if(arr==='fermentables'){ const hit=MALTS.find(x=>x[0]===name); if(hit){ r.fermentables[idx].ebc=hit[1]; r.fermentables[idx].potential=hit[2]; } }
+  if(arr==='hops'){ const hit=HOPS.find(x=>x[0]===name); if(hit){ r.hops[idx].alpha=hit[1]; } }
+  if(arr==='yeasts'){ const hit=YEASTS.find(x=>x[0]===name); if(hit){ r.yeasts[idx].attenuation=hit[1]; } }
+}
+
+/* gépelés közben csak a számított értékek frissülnek, a fókusz megmarad */
+function refreshCalcOnly(r){
+  const c = calc(r);
+  const bar = app.querySelector('.statbar');
+  if(bar) bar.innerHTML = statbarHtml(c);
+  const wg = app.querySelector('.water-grid');
+  if(wg) wg.innerHTML = waterHtml(c);
+  const sg = document.getElementById('styleguide-body');
+  if(sg) sg.innerHTML = styleGuideRows(r,c);
+  const mb = document.getElementById('maltbar');
+  if(mb) mb.innerHTML = maltBarHtml(r,c);
+  const hc = document.getElementById('hopchart');
+  if(hc) hc.innerHTML = hopChartHtml(r,c);
+}
+/* fókuszvesztéskor a soron belüli számított cellák (arány, IBU) is frissülnek */
+function refreshRowCalcs(r){
+  const c = calc(r);
+  refreshCalcOnly(r);
+  const fCalcs = app.querySelectorAll('[data-f^="fermentables."][data-f$=".amount"]');
+  fCalcs.forEach(inp=>{
+    const i = +inp.dataset.f.split('.')[1];
+    const row = inp.closest('.irow');
+    const cv = row && row.querySelector('.calcv');
+    if(cv){
+      const pct = c.totalKg>0 ? ((+r.fermentables[i].amount||0)/c.totalKg*100) : 0;
+      cv.textContent = pct.toFixed(1)+'%';
+    }
+  });
+  const hCalcs = app.querySelectorAll('[data-f^="hops."][data-f$=".amount"]');
+  hCalcs.forEach(inp=>{
+    const i = +inp.dataset.f.split('.')[1];
+    const row = inp.closest('.irow');
+    const cv = row && row.querySelector('.calcv');
+    if(cv) cv.textContent = r.hops[i].use==='dry' ? '—' : c.hopRows[i].toFixed(1);
+  });
+}
+
+/* ---------- beállítások modal ---------- */
+function openSettings(){
+  const S = settings;
+  const div = document.createElement('div');
+  div.className='modal-bg';
+  div.innerHTML = `<div class="modal">
+    <div class="ph"><h2>Felszerelés — alapértelmezések</h2><div class="spacer"></div></div>
+    <div class="pb kv">
+      <label>Adag térfogata</label><div class="unit-in"><input id="s-batchL" type="number" step="0.5" inputmode="decimal" value="${S.batchL}"><span>L</span></div>
+      <label>Forralás ideje</label><div class="unit-in"><input id="s-boilMin" type="number" step="5" inputmode="numeric" value="${S.boilMin}"><span>perc</span></div>
+      <label>Főzőházi hatásfok</label><div class="unit-in"><input id="s-brewhouseEff" type="number" step="1" inputmode="numeric" value="${S.brewhouseEff}"><span>%</span></div>
+      <label>Cefre-hatásfok</label><div class="unit-in"><input id="s-mashEff" type="number" step="1" inputmode="numeric" value="${S.mashEff}"><span>%</span></div>
+      <label>Párolgás</label><div class="unit-in"><input id="s-boiloffLph" type="number" step="0.1" inputmode="decimal" value="${S.boiloffLph}"><span>L/óra</span></div>
+      <label>Üst/seprő veszteség</label><div class="unit-in"><input id="s-kettleLossL" type="number" step="0.1" inputmode="decimal" value="${S.kettleLossL}"><span>L</span></div>
+      <label>Maláta vízfelvétele</label><div class="unit-in"><input id="s-absorpLkg" type="number" step="0.01" inputmode="decimal" value="${S.absorpLkg}"><span>L/kg</span></div>
+      <label>Holttér</label><div class="unit-in"><input id="s-deadspaceL" type="number" step="0.05" inputmode="decimal" value="${S.deadspaceL}"><span>L</span></div>
+      <label>Cefre sűrűsége</label><div class="unit-in"><input id="s-mashThickness" type="number" step="0.1" inputmode="decimal" value="${S.mashThickness}"><span>L/kg</span></div>
+      <div class="hint" style="grid-column:1/-1">Brewtools B40-re hangolva. Ezek az értékek az <b>új</b> receptekbe másolódnak; a meglévők a saját beállításaikat őrzik.</div>
+    </div>
+    <div class="pf">
+      <button class="btn" id="s-cancel">Mégse</button>
+      <button class="btn primary" id="s-save">Mentés</button>
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click', e=>{ if(e.target===div) div.remove(); });
+  div.querySelector('#s-cancel').onclick = ()=>div.remove();
+  div.querySelector('#s-save').onclick = ()=>{
+    for(const k of Object.keys(DEFAULT_SETTINGS)){
+      const el = div.querySelector('#s-'+k);
+      if(el && el.value!=='') settings[k] = +el.value;
+    }
+    scheduleSave(); div.remove(); toast('Felszerelés mentve'); render();
+  };
+}
+
+/* ---------- export / import ---------- */
+function exportAll(){
+  const blob = new Blob([JSON.stringify({recipes, settings}, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fozde-receptek.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importAll(file){
+  const fr = new FileReader();
+  fr.onload = ()=>{
+    try{
+      const data = JSON.parse(fr.result);
+      const incoming = Array.isArray(data) ? data : (data.recipes||[]);
+      let n=0;
+      for(const r of incoming){
+        if(!r || !r.name) continue;
+        if(!r.id || recipes.some(x=>x.id===r.id)) r.id='r'+Date.now()+Math.random().toString(36).slice(2,6);
+        recipes.push(r); n++;
+      }
+      if(data.settings) settings = {...DEFAULT_SETTINGS, ...data.settings};
+      scheduleSave(); render(); toast(n+' recept betöltve');
+    }catch(e){ toast('Nem sikerült beolvasni a fájlt'); }
+  };
+  fr.readAsText(file);
+}
+
+let toastTimer=null;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+function render(){ view.name==='edit' ? renderEdit() : renderList(); }
+
+document.getElementById('btn-settings').onclick = openSettings;
+document.getElementById('btn-export').onclick = exportAll;
+document.getElementById('btn-import').onclick = ()=>document.getElementById('import-file').click();
+document.getElementById('import-file').addEventListener('change', e=>{
+  if(e.target.files[0]) importAll(e.target.files[0]);
+  e.target.value='';
+});
+
+loadAll().then(()=>{
+  render();
+  if(!storageOk) toast('Figyelem: a mentés nem érhető el, a receptek csak erre a munkamenetre maradnak meg');
+});
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+}
+</script>
+</body>
+</html>
