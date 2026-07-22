@@ -17,14 +17,23 @@
 :root{
   --bg:#17130E; --panel:#211B13; --panel2:#2A2318; --border:#3A3122; --border2:#4A3F2C;
   --text:#EFE7D6; --muted:#A2957B; --dim:#6E6350;
-  --gold:#E5A63C; --gold-soft:#8A6A2E; --green:#94A85A; --red:#C96A4A;
+  --gold:#E5A63C; --gold-soft:#8A6A2E; --green:#94A85A; --red:#C96A4A; --copper:#C97C4A;
   --radius:10px;
   --display:'Bricolage Grotesque',system-ui,sans-serif;
   --body:'Inter',system-ui,sans-serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
 }
+body.light{
+  --bg:#F4EDDD; --panel:#FCF8EE; --panel2:#EFE6D2; --border:#DCD0B6; --border2:#C6B896;
+  --text:#2A2318; --muted:#6E6350; --dim:#9A8C70;
+  --gold:#B57A16; --gold-soft:#C9A45C; --copper:#A65E32;
+}
+body.light .btn.primary,body.light .tab.on{background:#E5A63C;border-color:#D69526;color:#1C1509}
+body.light .timerbar{border-top-color:#B57A16}
+body.light .fchart svg text{fill:#6E6350}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px}
+html{background:var(--bg)}
+body{background:radial-gradient(900px 420px at 18% -8%, rgba(229,166,60,.08), transparent 60%), radial-gradient(700px 320px at 85% -5%, rgba(201,124,74,.06), transparent 55%), var(--bg);color:var(--text);font-family:var(--body);font-size:14px;min-height:100vh}
 button{font-family:var(--body);cursor:pointer}
 input,select,textarea{font-family:var(--body);color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:7px 8px;font-size:13px;outline:none;min-width:0;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--gold)}
@@ -110,6 +119,55 @@ textarea{min-height:90px;resize:vertical;line-height:1.5}
 .hint{font-size:12px;color:var(--dim);line-height:1.5;margin-top:10px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--gold-soft);color:var(--text);padding:10px 18px;border-radius:8px;font-size:13px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
+/* ---------- stílus-műszerfal (manométerek) ---------- */
+.gauges{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px}
+.gauge{text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 4px 12px}
+.gauge svg{width:100%;max-width:112px;height:auto;display:block;margin:0 auto}
+.gval{font-family:var(--mono);font-weight:600;font-size:20px;color:var(--gold);margin-top:-4px}
+.gout .gval{color:#E8907A}
+.glab{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-top:3px;font-weight:600}
+.gout .glab{color:#B06A55}
+.grange{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:3px}
+.gout .grange{color:#C98A75}
+/* ---------- címke-stílusú kártyák, kereső, erjedési grafikon ---------- */
+.card{padding:14px 16px 14px 14px;gap:12px}
+.band{width:10px;align-self:stretch;border-radius:5px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4), inset -3px 0 6px rgba(0,0,0,.3)}
+.card-top{display:flex;align-items:center;gap:8px;margin-bottom:2px;min-width:0}
+.card-top h3{margin:0;flex:1}
+.stybadge{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--copper);border:1px solid var(--copper);border-radius:5px;padding:1px 6px;flex:none;letter-spacing:.5px}
+.cstats{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.2px;line-height:1.5}
+.days{font-size:11px;color:var(--dim)}
+.filter-row{margin-bottom:14px;max-width:360px}
+.fchart{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:12px}
+/* ---------- fülek, főzetek, kalkulátor, könyvtár ---------- */
+.tabs{display:flex;gap:6px}
+.tab{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:7px 16px;border-radius:8px;font-weight:600;font-size:13px}
+.tab.on{background:var(--gold);border-color:var(--gold);color:#1C1509}
+.status{font-family:var(--mono);font-size:10px;letter-spacing:.5px;text-transform:uppercase;padding:2px 9px;border-radius:10px;border:1px solid var(--border2);color:var(--muted)}
+.status.erjed{color:#C9D89B;border-color:#5A6B36;background:rgba(148,168,90,.12)}
+.status.kesz{color:var(--gold);border-color:var(--gold-soft);background:rgba(229,166,60,.1)}
+.stars span{font-size:20px;color:var(--dim);cursor:pointer;padding:0 2px;user-select:none}
+.stars .on{color:var(--gold)}
+.stars.ro span{cursor:default;font-size:13px}
+.check-list{display:flex;flex-direction:column;gap:6px}
+.chk{display:flex;align-items:center;gap:10px;font-size:13px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;cursor:pointer}
+.chk input{width:auto;accent-color:var(--gold);flex:none}
+.chk span{flex:1;line-height:1.4}
+.chk.done span{color:var(--dim);text-decoration:line-through}
+.chk .btn{flex:none}
+.timerbar{position:fixed;bottom:0;left:0;right:0;background:var(--panel2);border-top:2px solid var(--gold);display:flex;gap:14px;align-items:center;justify-content:center;padding:10px 16px;z-index:70}
+.timerbar b{font-family:var(--mono);font-size:22px;color:var(--gold)}
+.timerbar span{font-size:13px;color:var(--muted);max-width:40vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.calc-sec{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
+.calc-sec:first-child{border-top:none;padding-top:0;margin-top:0}
+.calc-sec h3{font-family:var(--display);font-size:13px;color:var(--gold);margin-bottom:8px}
+.cres{font-family:var(--mono);font-size:13px;color:var(--gold);font-weight:600}
+.librow{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.librow:last-child{border-bottom:none}
+.librow .body{flex:1;min-width:0}
+.librow h4{font-family:var(--display);font-size:14px}
+.librow .ls{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.modal.wide{max-width:600px}
 /* ---------- stíluskalauz ---------- */
 .style-panel .pb{display:flex;flex-direction:column;gap:7px}
 .srow{display:flex;align-items:center;gap:10px}
@@ -177,8 +235,27 @@ textarea{min-height:90px;resize:vertical;line-height:1.5}
   .slab{width:50px;font-size:10px}
   .meta-row select{max-width:none}
   .statbar::after{min-width:0}
+  .chk{font-size:14px}
+  .timerbar b{font-size:19px}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+@media print{
+  html,body{background:#fff !important;color:#111}
+  header.top,.btn,.tabs,.save-state,.filter-row,.addrow,.fld-rm,.toast,.timerbar{display:none !important}
+  .wrap{max-width:none;padding:0}
+  .panel,.statbar{background:#fff;border-color:#bbb;color:#111;break-inside:avoid}
+  .panel > .ph{background:#f2f2f2}
+  .panel > .ph h2,.stat .val,.wv,.name-input,.scur{color:#111}
+  .statbar::after{display:none}
+  input,select,textarea{background:#fff;border-color:#ccc;color:#111}
+  .flab,.stat .lab,.kv label,.wl,.calcv,.sum{color:#555}
+  .sfill{background:#e2ead0}
+  .sfill span{color:#4a5a2a}
+  .slab{background:#eee;border-color:#ccc;color:#111}
+  .irow{background:#fff}
+  .maltbar{border-color:#ccc}
+}
+
 </style>
 </head>
 <body>
@@ -186,16 +263,18 @@ textarea{min-height:90px;resize:vertical;line-height:1.5}
   <header class="top">
     <div class="logo">
       <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h9v3h2.5A2.5 2.5 0 0 1 20 9.5v4A2.5 2.5 0 0 1 17.5 16H15v4H6V4Z" stroke="currentColor" stroke-width="1.8"/><path d="M15 8.5h2.2a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1H15" stroke="currentColor" stroke-width="1.4"/><path d="M9 8v9M12 8v9" stroke="currentColor" stroke-width="1.4" opacity=".6"/></svg>
-      Főzde <small>recepttervező</small>
+      Főzde <small id="tagline">recepttervező</small>
     </div>
     <div class="spacer"></div>
     <button class="btn ghost" id="btn-export" title="Az összes recept mentése JSON fájlba">Mentés fájlba</button>
     <button class="btn ghost" id="btn-import">Betöltés fájlból</button>
+    <button class="btn ghost" id="btn-theme" title="Téma / Theme">☀</button>
+    <button class="btn ghost" id="btn-lang" title="Nyelv / Language">EN</button>
     <button class="btn" id="btn-settings">⚙ Felszerelés</button>
   </header>
   <main id="app"></main>
 </div>
-<input type="file" id="import-file" accept=".json" style="display:none">
+<input type="file" id="import-file" accept=".json,.xml,.beerxml" style="display:none">
 <div class="toast" id="toast"></div>
 
 <script>
@@ -212,7 +291,7 @@ const MALTS = [
   ["Extra Pale (Golden Promise)",4,82],["Munich I (Weyermann)",14,80],["Munich II (Weyermann)",21,80],
   ["Vienna (Weyermann)",8,80],["Wheat Malt, Pale (Weyermann)",4,82],["Carapils/Carafoam",4,75],
   ["CaraHell",25,75],["CaraMunich II",120,74],["CaraMunich III",150,74],["Crystal 60L",118,74],
-  ["Zabpehely (flaked oats)",2,70],["Búzapehely (flaked wheat)",2,72],["Rizspehely",1,70],
+  ["Zabpehely (flaked oats)",2,70],["Búzapehely (flaked wheat)",2,72],["Árpapehely (flaked barley)",2,70],["Rizspehely",1,70],
   ["Melanoidin",70,75],["Chocolate Malt",900,68],["Carafa Special II",830,70],["Roasted Barley",1200,68],
   ["Acidulated (savanyú maláta)",4,60],["Dextróz (cukor)",0,100],["Nádcukor",0,100],["Laktóz",0,76]
 ];
@@ -224,7 +303,7 @@ const HOPS = [
   ["Styrian Golding",5],["East Kent Golding",5.5],["Fuggle",4.5]
 ];
 const YEASTS = [
-  ["SafAle US-05",78],["Verdant IPA (Lallemand)",78],["SafAle S-04",75],["SafAle K-97",78],
+  ["SafAle US-05",78],["Verdant IPA (Lallemand)",78],["SafAle S-04",75],["SafAle K-97",78],["SafBrew WB-06 (búza)",82],
   ["SafLager W-34/70",82],["SafLager S-189",81],["SafAle BE-134 (saison)",89],["SafAle BE-256 (Abbaye)",82],
   ["SafAle T-58",75],["WLP001 California Ale",76],["Wyeast 1318 London Ale III",74],
   ["Omega OYL-071 Lutra Kveik",82],["Omega OYL-057 Hothead Kveik",80],["Lallemand Voss Kveik",80],
@@ -232,6 +311,55 @@ const YEASTS = [
 ];
 const HOP_USES = [["boil","Forralás"],["hopstand","Hopstand"],["dry","Szárazkomló"]];
 const MISC_WHEN = ["Cefrézés","Forralás","Whirlpool","Erjesztés","Palackozás/Hordó"];
+
+/* magyar → angol felirat-szótár; t() a kulcsot adja vissza magyar módban */
+const EN = {
+'recepttervező':'recipe designer','Mentés fájlba':'Save to file','Betöltés fájlból':'Load from file','Felszerelés':'Equipment',
+'Receptek':'Recipes','Főzetek':'Batches','db':'items','Könyvtár':'Library','Kalkulátorok':'Calculators','+ Új recept':'+ New recipe',
+'Keresés név vagy stílus szerint…':'Search by name or style…','Nincs találat.':'No results.',
+'Még nincs recepted.':'No recipes yet.','Kattints az „Új recept" gombra, vagy nézz szét a Könyvtárban.':'Hit "+ New recipe" or browse the Library.',
+'Még nincs főzeted.':'No batches yet.','Nyiss meg egy receptet és nyomd meg a „Főzet indítása" gombot — onnantól ott a főzésnapi lista, és felírhatod a mért értékeket.':'Open a recipe and hit "Start batch" — you get the brew day checklist and can log your measurements.',
+'Tervezett':'Planned','Erjed':'Fermenting','Kész':'Done','(terv)':'(planned)','hatásfok':'efficiency','. napja erjed':' days fermenting',
+' — főzet':' — batches',' — liter':' — liters','Átlag ABV (mért)':'Avg ABV (measured)','Leggyakoribb stílus':'Top style',
+'← Receptek':'← Recipes','Főzet indítása':'Start batch','Bevásárlólista':'Shopping list','Nyomtatás':'Print','Duplikálás':'Duplicate','Törlés':'Delete',
+'stílus neve':'style name','szerző':'author','— egyéni stílus —':'— custom style —',
+'Szín':'Color','Forralás előtti':'Pre-boil','Kalória':'Calories','Szénhidrát':'Carbs',
+'Stíluskalauz — ':'Style guide — ','cél':'target',
+'Maláták':'Fermentables','Élesztő':'Yeast','Cefrézés':'Mash','Víz':'Water','Komlók':'Hops','Erjesztés':'Fermentation','Egyéb hozzávalók':'Miscellaneous','Főzet beállításai':'Batch settings','Jegyzetek':'Notes','Erjedési napló':'Fermentation log','Mért értékek':'Measured values','Főzésnap':'Brew day',
+'lekötés: ':'attenuation: ',' · szárazk. ':' · dry hop ',
+'Maláta':'Fermentable','Kiv. %':'Yield %','Arány':'Share','Komló':'Hop','Mikor':'When','Perc':'Min','Nap':'Days','Csomag':'Packs','Lekötés %':'Atten. %','Név':'Name','Mennyiség':'Amount','Lépés':'Step','Szakasz':'Stage','Dátum':'Date',
+'maláta neve':'fermentable name','komló neve':'hop name','élesztő neve':'yeast name','pl. gipsz, Whirlfloc':'e.g. gypsum, Whirlfloc','pl. 5 g':'e.g. 5 g',
+'Forralás':'Boil','Hopstand':'Hopstand','Szárazkomló':'Dry hop','Whirlpool':'Whirlpool','Palackozás/Hordó':'Bottling/Keg',
+'+ Maláta':'+ Fermentable','+ Komló':'+ Hop','+ Élesztő':'+ Yeast','+ Hozzávaló':'+ Item','+ Lépés':'+ Step','+ Szakasz':'+ Stage','+ Mérés':'+ Reading',
+'Hopstand hőmérséklet':'Hopstand temperature','Szénsav':'Carbonation','Adag térfogata':'Batch volume','Főzőházi hatásfok':'Brewhouse efficiency','Cefre-hatásfok':'Mash efficiency',
+'A párolgás, veszteségek és vízarányok a ⚙ Felszerelés alatt állíthatók — azok minden új receptre érvényesek.':'Boil-off, losses and water ratios live under ⚙ Equipment — those apply to every new recipe.',
+'Cefrevíz':'Mash water','Csurgatóvíz':'Sparge water','Összes víz':'Total water','Cefre térfogat (víz + maláta)':'Mash volume (water + grain)','Forralás előtti térfogat':'Pre-boil volume',
+'főzési jegyzetek, tapasztalatok…':'brew notes, lessons learned…','kóstolási jegyzet, mit csinálnál másképp…':'tasting notes, what to change next time…',
+'Mentve':'Saved','Mentés sikertelen':'Save failed',
+'← Főzetek':'← Batches','Recept':'Recipe','értékelés':'rating','Forralás előtti SG':'Pre-boil SG','terv':'plan','Térfogat az erjesztőben':'Volume in fermenter',
+'Tényleges ABV':'Actual ABV','Tényleges lekötés':'Actual attenuation','Tényleges főzőházi hatásfok':'Actual brewhouse efficiency',
+'Tipp: hidrométeres mérésnél a hőmérséklet-korrekciót a Kalkulátorok alatt találod.':'Tip: for hydrometer readings, the temperature correction is under Calculators.',
+'Vegyél fel legalább két SG-mérést, és itt kirajzolódik az erjedési görbe.':'Add at least two SG readings and the fermentation curve appears here.','nap':'days',
+'Vízbekészítés: ':'Water prep: ',' L cefrevíz':' L mash water',' L csurgatóvíz':' L sparge water','perc':'min','Csurgatás (':'Sparge (','Forralás: ':'Boil: ',' perccel a forralás vége előtt':' min before end of boil',' a forralásba':' into the boil','Hűtés ':'Chill to ',' °C-ra a hopstandhez':' °C for the hopstand','Hopstand: ':'Hopstand: ',' — whirlpool':' — whirlpool','Hűtés erjesztési hőmérsékletre, átfejtés (cél: ':'Chill to fermentation temp, transfer (target: ','Élesztő: ':'Yeast: ',' csomag ':' pack ','Mért OG felírása a Mért értékek panelbe':'Log the measured OG in the Measured values panel','Szárazkomló: ':'Dry hop: ',' nap':' days',' az erjesztőbe':' into the fermenter',
+'Leállít':'Stop','⏱ Időzítő elindítva: ':'⏱ Timer started: ','⏱ Lejárt: ':'⏱ Time is up: ',' perc':' min',
+'Recept duplikálva':'Recipe duplicated','Recept törölve':'Recipe deleted','Biztos törlöd a receptet:':'Delete this recipe:','Biztos törlöd ezt a főzetet?':'Delete this batch?',
+'Főzet létrehozva — a recept pillanatképe elmentve':'Batch created — recipe snapshot saved','Főzet törölve':'Batch deleted','Felszerelés mentve':'Equipment saved',
+' recept betöltve':' recipes loaded',' recept importálva (BeerXML)':' recipes imported (BeerXML)','Nem sikerült beolvasni a fájlt':'Could not read the file',
+'Vágólapra másolva':'Copied to clipboard','Nem sikerült másolni':'Copy failed','Másolás vágólapra':'Copy to clipboard','Nincs hozzávaló a receptben.':'No ingredients in this recipe.',
+'Hozzáadás':'Add','Hozzáadva ✓':'Added ✓','Bezár':'Close','Mégse':'Cancel','Mentés':'Save',' a receptjeid közt':' added to your recipes',
+'(másolat)':'(copy)','Új recept':'New recipe','Importált recept':'Imported recipe','Importált':'Imported',
+'Felszerelés — alapértelmezések':'Equipment — defaults','Forralás ideje':'Boil time','Párolgás':'Boil-off','Üst/seprő veszteség':'Kettle/trub loss','Maláta vízfelvétele':'Grain absorption','Holttér':'Dead space','Cefre sűrűsége':'Mash thickness','L/óra':'L/h',
+'Brewtools B40-re hangolva. Ezek az értékek az':'Tuned for the Brewtools B40. These values are copied into','új':'new','receptekbe másolódnak; a meglévők a saját beállításaikat őrzik.':'recipes; existing ones keep their own settings.',
+'Hidrométer hőmérséklet-korrekció':'Hydrometer temperature correction','Mért SG':'Measured SG','Minta hőmérséklete':'Sample temperature','Hidrométer kalibrációja':'Hydrometer calibration','Korrigált SG':'Corrected SG',
+'Refraktométer':'Refractometer','Brix erjedés előtt':'Brix before fermentation','Brix erjedés közben/után':'Brix during/after fermentation','(üresen: csak OG)':'(empty: OG only)','Korrekciós faktor (WCF)':'Wort correction factor (WCF)','Eredmény':'Result','(pontosított: ':'(refined: ',
+'ABV mért értékekből':'ABV from measured values','Előcukrozás (palack/hordó)':'Priming (bottle/keg)','Sör mennyisége':'Beer volume','Cél szénsav':'Target carbonation','Sör hőmérséklete':'Beer temperature','Dextróz':'Dextrose',' g összesen (':' g total (',' · maradék CO₂: ':' · residual CO₂: ',
+'Sópótlás (vízkémia)':'Salt additions (water chemistry)','Víz mennyisége':'Water volume','Gipsz (CaSO₄)':'Gypsum (CaSO₄)','Kalcium-klorid (CaCl₂)':'Calcium chloride (CaCl₂)','Keserűsó (MgSO₄)':'Epsom salt (MgSO₄)','Konyhasó (NaCl)':'Table salt (NaCl)',
+'Kalcium (Ca²⁺)':'Calcium (Ca²⁺)','Szulfát (SO₄²⁻)':'Sulfate (SO₄²⁻)','Klorid (Cl⁻)':'Chloride (Cl⁻)','Magnézium (Mg²⁺)':'Magnesium (Mg²⁺)','Nátrium (Na⁺)':'Sodium (Na⁺)','Klorid : szulfát arány':'Chloride : sulfate ratio',
+'A hozzáadott ionokat mutatja (a csapvized saját tartalma ehhez még hozzájön). NEIPA-hoz jellemzően a klorid, keserű IPA-hoz a szulfát dominál.':'Shows the added ions (your tap water adds its own on top). NEIPAs usually lean chloride, bitter IPAs lean sulfate.',
+'Kipróbált alapreceptek 21 literre, a te felszerelés-beállításaiddal számolva. Hozzáadás után szabadon átírhatod. Máshonnan (pl. sörös oldalakról) BeerXML fájllal tudsz receptet behozni a „Betöltés fájlból" gombbal.':'Tried-and-true base recipes for 21 L, calculated with your equipment settings. Edit freely after adding. Recipes from elsewhere (e.g. brewing sites) can be imported as BeerXML via "Load from file".',
+'Figyelem: a mentés nem érhető el, a receptek csak erre a munkamenetre maradnak meg':'Warning: storage is unavailable, recipes only persist for this session'
+};
+function t(s){ if(ui.lang!=='en') return s; return EN[s]!==undefined ? EN[s] : s; }
 
 /* BJCP 2021 stílus-tartományok: id, név, ABV, OG, FG, IBU, EBC (min-max) */
 const STYLES = [
@@ -255,7 +383,10 @@ const STYLES = [
 ["26D","Belgian Dark Strong Ale",8.0,12.0,1.075,1.110,1.010,1.024,20,35,23.6,43.3],
 ["20A","American Porter",4.8,6.5,1.050,1.070,1.012,1.018,25,50,43.3,78.8],
 ["16A","Sweet Stout",4.0,6.0,1.044,1.060,1.012,1.024,20,40,59.1,78.8],
-["20C","Imperial Stout",8.0,12.0,1.075,1.115,1.018,1.030,50,90,59.1,78.8]
+["20C","Imperial Stout",8.0,12.0,1.075,1.115,1.018,1.030,50,90,59.1,78.8],
+["15B","Irish Stout",3.8,5.0,1.036,1.044,1.007,1.011,25,45,49.3,78.8],
+["25C","Belgian Golden Strong Ale",7.5,10.5,1.070,1.095,1.005,1.016,22,35,5.9,11.8],
+["11B","Best Bitter",3.8,4.6,1.040,1.048,1.008,1.012,25,40,15.8,31.5]
 ];
 
 function icon(n){
@@ -279,6 +410,7 @@ function ebcHex(ebc){ const srm = Math.max(1, Math.min(40, Math.round(ebc/1.97))
 
 /* ================= tároló ================= */
 let recipes = [];
+let batches = [];
 let settings = {...DEFAULT_SETTINGS};
 let storageOk = true;
 
@@ -305,6 +437,8 @@ async function storSet(k,v){
 async function loadAll(){
   try{
     const r = await storGet('fozde-recipes'); if(r) recipes = JSON.parse(r);
+    const b = await storGet('fozde-batches'); if(b) batches = JSON.parse(b);
+    const u = await storGet('fozde-ui'); if(u) ui = {...ui, ...JSON.parse(u)};
     const s = await storGet('fozde-settings'); if(s) settings = {...DEFAULT_SETTINGS, ...JSON.parse(s)};
   }catch(e){ storageOk=false; }
 }
@@ -317,9 +451,10 @@ function scheduleSave(){
 async function saveAll(){
   const ok1 = await storSet('fozde-recipes', JSON.stringify(recipes));
   const ok2 = await storSet('fozde-settings', JSON.stringify(settings));
-  setSaveState(ok1 && ok2 ? 'Mentve' : 'Mentés sikertelen');
+  const ok3 = await storSet('fozde-batches', JSON.stringify(batches));
+  setSaveState(ok1 && ok2 && ok3 ? 'Mentve' : 'Mentés sikertelen');
 }
-function setSaveState(t){ const el=document.getElementById('save-state'); if(el) el.textContent=t; }
+function setSaveState(txt){ const el=document.getElementById('save-state'); if(el) el.textContent=t(txt); }
 
 /* ================= számítások ================= */
 const sgToPlato = sg => -616.868 + 1111.14*sg - 630.272*sg*sg + 135.997*sg*sg*sg;
@@ -383,14 +518,14 @@ function calc(r){
           totalWater,mashWater,spargeWater,mashVol,att,hopRows,kcal100,carbs100};
 }
 const fmtSg = v => v.toFixed(3);
-const fmt1 = v => (Math.round(v*10)/10).toLocaleString('hu-HU');
-const fmt2 = v => (Math.round(v*100)/100).toLocaleString('hu-HU');
+const fmt1 = v => (Math.round(v*10)/10).toLocaleString(ui.lang==='en'?'en-GB':'hu-HU');
+const fmt2 = v => (Math.round(v*100)/100).toLocaleString(ui.lang==='en'?'en-GB':'hu-HU');
 
 /* ================= recept-műveletek ================= */
 function newRecipe(){
   return {
     id: 'r'+Date.now()+Math.random().toString(36).slice(2,6),
-    name: 'Új recept', style: '21B New England IPA', styleId: '21B', author: 'Sörfőzés Albert Szabival',
+    name: t('Új recept'), style: '21B New England IPA', styleId: '21B', author: 'Sörfőzés Albert Szabival',
     created: Date.now(),
     equip: {...settings},
     hopstandTemp: 80,
@@ -405,6 +540,20 @@ function newRecipe(){
 /* ================= nézetek ================= */
 const app = document.getElementById('app');
 let view = {name:'list'};
+let listTab = 'recipes';
+let searchQ = '';
+let ui = {theme:'dark', lang:'hu'};
+async function saveUi(){ try{ await storSet('fozde-ui', JSON.stringify(ui)); }catch(e){} }
+function applyUi(){
+  document.body.classList.toggle('light', ui.theme==='light');
+  const set=(id,txt)=>{ const el=document.getElementById(id); if(el) el.textContent=txt; };
+  set('tagline', t('recepttervező'));
+  set('btn-export', t('Mentés fájlba'));
+  set('btn-import', t('Betöltés fájlból'));
+  set('btn-settings', '⚙ '+t('Felszerelés'));
+  set('btn-theme', ui.theme==='light' ? '☾' : '☀');
+  set('btn-lang', ui.lang==='hu' ? 'EN' : 'HU');
+}
 
 function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 
@@ -416,48 +565,118 @@ function glassSvg(hex, h=64){
   </svg>`;
 }
 
+const stLab = {tervezett:'Tervezett', erjed:'Erjed', kesz:'Kész'};
+
+function listChrome(count){
+  return `<div class="list-head">
+      <div class="tabs">
+        <button class="tab ${listTab==='recipes'?'on':''}" data-tab="recipes">${t('Receptek')}</button>
+        <button class="tab ${listTab==='batches'?'on':''}" data-tab="batches">${t('Főzetek')}</button>
+      </div>
+      <span class="count">${count} ${t('db')}</span>
+      <div class="spacer"></div>
+      <button class="btn small" id="btn-lib">${t('Könyvtár')}</button>
+      <button class="btn small" id="btn-calc">${t('Kalkulátorok')}</button>
+      ${listTab==='recipes'?'<button class="btn primary" id="btn-new">'+t('+ Új recept')+'</button>':''}
+    </div>`;
+}
+function wireChrome(){
+  app.querySelectorAll('[data-tab]').forEach(b=>{ b.onclick=()=>{ listTab=b.dataset.tab; render(); }; });
+  const lib=document.getElementById('btn-lib'); if(lib) lib.onclick=openLibrary;
+  const cb=document.getElementById('btn-calc'); if(cb) cb.onclick=openCalc;
+  const nb=document.getElementById('btn-new');
+  if(nb) nb.onclick=()=>{ const r=newRecipe(); recipes.push(r); scheduleSave(); view={name:'edit',id:r.id}; render(); };
+}
+function recipeCardHtml(r){
+  const c = calc(r);
+  return `<div class="card" data-open="${r.id}">
+    <div class="band" style="background:${ebcHex(c.ebc)}"></div>
+    <div class="body">
+      <div class="card-top">${r.styleId?`<span class="stybadge">${esc(r.styleId)}</span>`:''}<h3>${esc(r.name)}</h3></div>
+      <div class="style">${esc(r.style||'—')}</div>
+      <div class="cstats">${c.abv.toFixed(1)}% · ${fmtSg(c.og)} → ${fmtSg(c.fg)} · ${Math.round(c.ibu)} IBU · ${fmt1(c.ebc)} EBC · ${r.equip.batchL} L</div>
+    </div>
+  </div>`;
+}
+function filteredRecipes(){
+  const q = searchQ.trim().toLowerCase();
+  return recipes.slice().sort((a,b)=>b.created-a.created)
+    .filter(r=>!q || (r.name||'').toLowerCase().includes(q) || (r.style||'').toLowerCase().includes(q));
+}
+function bindRecipeCards(){
+  app.querySelectorAll('[data-open]').forEach(el=>{
+    el.onclick = ()=>{ view={name:'edit', id:el.dataset.open}; render(); };
+  });
+}
 function renderList(){
-  const cards = recipes
-    .slice().sort((a,b)=>b.created-a.created)
-    .map(r=>{
-      const c = calc(r);
-      return `<div class="card" data-open="${r.id}">
-        ${glassSvg(ebcHex(c.ebc))}
+  if(listTab==='batches') return renderBatchList();
+  const cards = filteredRecipes().map(recipeCardHtml).join('');
+  app.innerHTML = listChrome(recipes.length) + `
+    ${recipes.length>2?`<div class="filter-row"><input id="q" type="search" placeholder="${t('Keresés név vagy stílus szerint…')}" value="${esc(searchQ)}"></div>`:''}
+    ${recipes.length ? `<div class="grid" id="rgrid">${cards||'<div class="empty" style="grid-column:1/-1">'+t('Nincs találat.')+'</div>'}</div>` :
+      `<div class="empty"><strong>${t('Még nincs recepted.')}</strong><p>${t('Kattints az „Új recept" gombra, vagy nézz szét a Könyvtárban.')}</p></div>`}
+  `;
+  wireChrome();
+  const q=document.getElementById('q');
+  if(q){
+    q.addEventListener('input', ()=>{
+      searchQ = q.value;
+      const g=document.getElementById('rgrid');
+      if(g){
+        const cs=filteredRecipes().map(recipeCardHtml).join('');
+        g.innerHTML = cs || '<div class="empty" style="grid-column:1/-1">'+t('Nincs találat.')+'</div>';
+        bindRecipeCards();
+      }
+    });
+  }
+  bindRecipeCards();
+}
+function batchStatsHtml(){
+  const yr = new Date().getFullYear().toString();
+  const ys = batches.filter(b=>(b.date||'').startsWith(yr));
+  if(!ys.length) return '';
+  const lit = ys.reduce((s,b)=>s+(+b.measured.vol || (b.snapshot&&b.snapshot.equip.batchL) || 0),0);
+  const abvs = ys.map(b=>batchCalc(b).abv).filter(v=>v!=null);
+  const avg = abvs.length ? abvs.reduce((a,b)=>a+b,0)/abvs.length : null;
+  const styleCount = {};
+  ys.forEach(b=>{ const s=(b.snapshot&&b.snapshot.style)||'—'; styleCount[s]=(styleCount[s]||0)+1; });
+  const fav = Object.entries(styleCount).sort((a,b)=>b[1]-a[1])[0];
+  return `<div class="statbar" style="margin-bottom:16px">
+    <div class="stat"><div class="lab">${yr}${t(' — főzet')}</div><div class="val">${ys.length}</div></div>
+    <div class="stat"><div class="lab">${yr}${t(' — liter')}</div><div class="val">${fmt1(lit)}<small> L</small></div></div>
+    <div class="stat"><div class="lab">${t('Átlag ABV (mért)')}</div><div class="val">${avg!=null?avg.toFixed(1):'—'}<small>${avg!=null?'%':''}</small></div></div>
+    <div class="stat"><div class="lab">${t('Leggyakoribb stílus')}</div><div class="val" style="font-size:13px;line-height:1.9">${fav?esc(fav[0]):'—'}</div></div>
+  </div>`;
+}
+function renderBatchList(){
+  const cards = batches
+    .slice().sort((a,b)=> (b.date||'').localeCompare(a.date||''))
+    .map(b=>{
+      const bc = batchCalc(b);
+      const abv = bc.abv!=null ? bc.abv.toFixed(1)+'%' : bc.plan.abv.toFixed(1)+'% '+t('(terv)');
+      const day = (b.status==='erjed' && b.date) ? Math.max(1, Math.floor((Date.now()-new Date(b.date).getTime())/86400000)+1) : null;
+      return `<div class="card" data-openb="${b.id}">
+        <div class="band" style="background:${ebcHex(bc.plan.ebc)}"></div>
         <div class="body">
-          <h3>${esc(r.name)}</h3>
-          <div class="style">${esc(r.style||'—')}</div>
-          <div class="chip-row">
-            <span class="chip"><b>${c.abv.toFixed(1)}%</b></span>
-            <span class="chip">OG <b>${fmtSg(c.og)}</b></span>
-            <span class="chip">IBU <b>${Math.round(c.ibu)}</b></span>
-            <span class="chip">EBC <b>${fmt1(c.ebc)}</b></span>
-            <span class="chip"><b>${r.equip.batchL}</b> L</span>
-          </div>
+          <div class="card-top"><span class="status ${b.status}">${t(stLab[b.status]||b.status)}</span><h3>${esc(b.name)}</h3></div>
+          <div class="style">${b.date||''} ${b.rating?`<span class="stars ro">${'★'.repeat(b.rating)}</span>`:''} ${day?`<span class="days">· ${day}${t('. napja erjed')}</span>`:''}</div>
+          <div class="cstats">${abv}${b.measured.og?` · OG ${(+b.measured.og).toFixed(3)}`:''}${bc.eff!=null?` · ${t('hatásfok')} ${bc.eff.toFixed(0)}%`:''}</div>
         </div>
       </div>`;
     }).join('');
-  app.innerHTML = `
-    <div class="list-head">
-      <h1>Receptek</h1>
-      <span class="count">${recipes.length} db</span>
-      <div class="spacer"></div>
-      <button class="btn primary" id="btn-new">+ Új recept</button>
-    </div>
-    ${recipes.length ? `<div class="grid">${cards}</div>` :
-      `<div class="empty"><strong>Még nincs recepted.</strong><p>Kattints az „Új recept” gombra — a felszerelés (B40, 21 L) alapból be van állítva.</p></div>`}
+  app.innerHTML = listChrome(batches.length) + (batches.length?batchStatsHtml():'') + `
+    ${batches.length ? `<div class="grid">${cards}</div>` :
+      `<div class="empty"><strong>${t('Még nincs főzeted.')}</strong><p>${t('Nyiss meg egy receptet és nyomd meg a „Főzet indítása" gombot — onnantól ott a főzésnapi lista, és felírhatod a mért értékeket.')}</p></div>`}
   `;
-  document.getElementById('btn-new').onclick = ()=>{
-    const r = newRecipe(); recipes.push(r); scheduleSave();
-    view={name:'edit', id:r.id}; render();
-  };
-  app.querySelectorAll('[data-open]').forEach(el=>{
-    el.onclick = ()=>{ view={name:'edit', id:el.dataset.open}; render(); };
+  wireChrome();
+  app.querySelectorAll('[data-openb]').forEach(el=>{
+    el.onclick = ()=>{ view={name:'batch', id:el.dataset.openb}; render(); };
   });
 }
 
 /* ---------- mező-építők ---------- */
 function fld(label, inner, cls=''){
-  return `<div class="fld ${cls}"><span class="flab">${label}</span>${inner}</div>`;
+  return `<div class="fld ${cls}"><span class="flab">${t(label)}</span>${inner}</div>`;
 }
 function rmBtn(path){
   return `<div class="fld fld-rm"><span class="flab">&nbsp;</span><button data-rm="${path}" title="törlés">×</button></div>`;
@@ -467,7 +686,7 @@ function rowsHtml(r,c){
   const fRows = r.fermentables.map((f,i)=>{
     const pct = c.totalKg>0 ? ((+f.amount||0)/c.totalKg*100) : 0;
     return `<div class="irow" style="--cols:1fr 74px 66px 66px 56px 30px">
-      ${fld('Maláta',`<input list="malts" data-f="fermentables.${i}.name" value="${esc(f.name)}" placeholder="maláta neve">`,'fld-name')}
+      ${fld('Maláta',`<input list="malts" data-f="fermentables.${i}.name" value="${esc(f.name)}" placeholder="${t('maláta neve')}">`,'fld-name')}
       ${fld('kg',`<input type="number" step="0.05" inputmode="decimal" data-f="fermentables.${i}.amount" value="${f.amount}">`)}
       ${fld('EBC',`<input type="number" step="0.5" inputmode="decimal" data-f="fermentables.${i}.ebc" value="${f.ebc}">`)}
       ${fld('Kiv. %',`<input type="number" step="1" inputmode="numeric" data-f="fermentables.${i}.potential" value="${f.potential}">`)}
@@ -476,24 +695,24 @@ function rowsHtml(r,c){
     </div>`;
   }).join('');
   const hRows = r.hops.map((h,i)=>`<div class="irow" style="--cols:1fr 62px 62px 116px 62px 66px 30px">
-      ${fld('Komló',`<input list="hops" data-f="hops.${i}.name" value="${esc(h.name)}" placeholder="komló neve">`,'fld-name')}
+      ${fld('Komló',`<input list="hops" data-f="hops.${i}.name" value="${esc(h.name)}" placeholder="${t('komló neve')}">`,'fld-name')}
       ${fld('g',`<input type="number" step="1" inputmode="decimal" data-f="hops.${i}.amount" value="${h.amount}">`)}
       ${fld('α %',`<input type="number" step="0.1" inputmode="decimal" data-f="hops.${i}.alpha" value="${h.alpha}">`)}
-      ${fld('Mikor',`<select data-f="hops.${i}.use">${HOP_USES.map(([v,l])=>`<option value="${v}" ${h.use===v?'selected':''}>${l}</option>`).join('')}</select>`,'fld-w3')}
+      ${fld('Mikor',`<select data-f="hops.${i}.use">${HOP_USES.map(([v,l])=>`<option value="${v}" ${h.use===v?'selected':''}>${t(l)}</option>`).join('')}</select>`,'fld-w3')}
       ${fld(h.use==='dry'?'Nap':'Perc',`<input type="number" step="1" inputmode="numeric" data-f="hops.${i}.time" value="${h.time}">`)}
       ${fld('IBU',`<div class="calcv">${h.use==='dry' ? '—' : c.hopRows[i].toFixed(1)}</div>`)}
       ${rmBtn('hops.'+i)}
     </div>`).join('');
   const yRows = r.yeasts.map((y,i)=>`<div class="irow" style="--cols:1fr 74px 90px 30px">
-      ${fld('Élesztő',`<input list="yeasts" data-f="yeasts.${i}.name" value="${esc(y.name)}" placeholder="élesztő neve">`,'fld-name')}
+      ${fld('Élesztő',`<input list="yeasts" data-f="yeasts.${i}.name" value="${esc(y.name)}" placeholder="${t('élesztő neve')}">`,'fld-name')}
       ${fld('Csomag',`<input type="number" step="1" inputmode="numeric" data-f="yeasts.${i}.amount" value="${y.amount}">`)}
       ${fld('Lekötés %',`<input type="number" step="1" inputmode="numeric" data-f="yeasts.${i}.attenuation" value="${y.attenuation}">`,'fld-w3')}
       ${rmBtn('yeasts.'+i)}
     </div>`).join('');
   const mRows = r.misc.map((m,i)=>`<div class="irow" style="--cols:1fr 100px 140px 30px">
-      ${fld('Név',`<input data-f="misc.${i}.name" value="${esc(m.name)}" placeholder="pl. gipsz, Whirlfloc">`,'fld-name')}
-      ${fld('Mennyiség',`<input data-f="misc.${i}.amount" value="${esc(m.amount)}" placeholder="pl. 5 g">`,'fld-w3')}
-      ${fld('Mikor',`<select data-f="misc.${i}.when">${MISC_WHEN.map(w=>`<option ${m.when===w?'selected':''}>${w}</option>`).join('')}</select>`,'fld-w3')}
+      ${fld('Név',`<input data-f="misc.${i}.name" value="${esc(m.name)}" placeholder="${t('pl. gipsz, Whirlfloc')}">`,'fld-name')}
+      ${fld('Mennyiség',`<input data-f="misc.${i}.amount" value="${esc(m.amount)}" placeholder="${t('pl. 5 g')}">`,'fld-w3')}
+      ${fld('Mikor',`<select data-f="misc.${i}.when">${MISC_WHEN.map(w=>`<option value="${w}" ${m.when===w?'selected':''}>${t(w)}</option>`).join('')}</select>`,'fld-w3')}
       ${rmBtn('misc.'+i)}
     </div>`).join('');
   const msRows = r.mashSteps.map((s,i)=>`<div class="irow" style="--cols:1fr 74px 74px 30px">
@@ -513,57 +732,78 @@ function rowsHtml(r,c){
 
 function statbarHtml(c){
   return `
-    <div class="stat color-stat">${glassSvg(ebcHex(c.ebc),46)}<div><div class="lab">Szín</div><div class="val">${fmt1(c.ebc)} <small>EBC</small></div></div></div>
+    <div class="stat color-stat">${glassSvg(ebcHex(c.ebc),46)}<div><div class="lab">${t('Szín')}</div><div class="val">${fmt1(c.ebc)} <small>EBC</small></div></div></div>
     <div class="stat"><div class="lab">ABV</div><div class="val">${c.abv.toFixed(1)}<small>%</small></div></div>
     <div class="stat"><div class="lab">OG</div><div class="val">${fmtSg(c.og)}</div></div>
     <div class="stat"><div class="lab">FG</div><div class="val">${fmtSg(c.fg)}</div></div>
     <div class="stat"><div class="lab">IBU</div><div class="val">${Math.round(c.ibu)}</div></div>
     <div class="stat"><div class="lab">BU/GU</div><div class="val">${c.bugu.toFixed(2)}</div></div>
-    <div class="stat"><div class="lab">Forralás előtti</div><div class="val">${fmtSg(c.preBoilOg)}</div></div>
-    <div class="stat"><div class="lab">Kalória</div><div class="val">${Math.round(c.kcal100)}<small> kcal/100 ml</small></div></div>
-    <div class="stat"><div class="lab">Szénhidrát</div><div class="val">${c.carbs100.toFixed(1)}<small> g/100 ml</small></div></div>`;
+    <div class="stat"><div class="lab">${t('Forralás előtti')}</div><div class="val">${fmtSg(c.preBoilOg)}</div></div>
+    <div class="stat"><div class="lab">${t('Kalória')}</div><div class="val">${Math.round(c.kcal100)}<small> kcal/100 ml</small></div></div>
+    <div class="stat"><div class="lab">${t('Szénhidrát')}</div><div class="val">${c.carbs100.toFixed(1)}<small> g/100 ml</small></div></div>`;
 }
 function waterHtml(c){
   return `
-      <span class="wl">Cefrevíz</span><span class="wv">${fmt2(c.mashWater)} L</span>
-      <span class="wl">Csurgatóvíz</span><span class="wv">${fmt2(c.spargeWater)} L</span>
-      <span class="wl">Összes víz</span><span class="wv">${fmt2(c.totalWater)} L</span>
-      <span class="wl">Cefre térfogat (víz + maláta)</span><span class="wv">${fmt2(c.mashVol)} L</span>
-      <span class="wl">Forralás előtti térfogat</span><span class="wv">${fmt2(c.preBoilL)} L</span>`;
+      <span class="wl">${t('Cefrevíz')}</span><span class="wv">${fmt2(c.mashWater)} L</span>
+      <span class="wl">${t('Csurgatóvíz')}</span><span class="wv">${fmt2(c.spargeWater)} L</span>
+      <span class="wl">${t('Összes víz')}</span><span class="wv">${fmt2(c.totalWater)} L</span>
+      <span class="wl">${t('Cefre térfogat (víz + maláta)')}</span><span class="wv">${fmt2(c.mashVol)} L</span>
+      <span class="wl">${t('Forralás előtti térfogat')}</span><span class="wv">${fmt2(c.preBoilL)} L</span>`;
 }
 
-function styleRow(label,val,lo,hi,fmt){
-  const span=(hi-lo)||Math.abs(hi)*0.1||1;
-  const pad=0.18;
+function gaugeSvg(label, val, lo, hi, fmt){
+  const span=(hi-lo)||Math.abs(hi)*0.1||1, pad=0.18;
   const rlo=lo-span*pad, rhi=hi+span*pad;
-  let pct=(val-rlo)/(rhi-rlo)*100;
-  const inR=val>=lo-1e-9&&val<=hi+1e-9;
-  pct=Math.max(1,Math.min(99,pct));
-  const gLeft=pad/(1+2*pad)*100, gW=100/(1+2*pad);
-  return `<div class="srow">
-    <span class="slab${inR?'':' out'}">${label}</span>
-    <div class="sbar">
-      <div class="sfill" style="left:${gLeft.toFixed(2)}%;width:${gW.toFixed(2)}%"><span>${fmt(lo)}</span><span>${fmt(hi)}</span></div>
-      <div class="smark" style="left:${pct.toFixed(2)}%"></div>
-      <span class="scur${pct>72?' flip':''}" style="left:${pct.toFixed(2)}%">${fmt(val)}</span>
-    </div>
+  let f=(val-rlo)/(rhi-rlo); f=Math.max(0,Math.min(1,f));
+  const inR = val>=lo-1e-9 && val<=hi+1e-9;
+  const cx=60, cy=64, r=44;
+  const A=t=>210-240*t;
+  const P=(a,rr)=>[cx+rr*Math.cos(a*Math.PI/180), cy-rr*Math.sin(a*Math.PI/180)];
+  const arc=(a0,a1,rr)=>{
+    const p0=P(a0,rr), p1=P(a1,rr);
+    const la=(a0-a1)>180?1:0;
+    return `M ${p0[0].toFixed(1)} ${p0[1].toFixed(1)} A ${rr} ${rr} 0 ${la} 1 ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}`;
+  };
+  const fLo=pad/(1+2*pad), fHi=(1+pad)/(1+2*pad);
+  const n=P(A(f), r-9);
+  const needle = inR ? 'var(--gold)' : '#E06A4A';
+  /* kis skálavonalak */
+  let ticks='';
+  for(let i=0;i<=8;i++){
+    const a=A(i/8);
+    const t0=P(a,r-4), t1=P(a,r+0.5);
+    ticks+=`<line x1="${t0[0].toFixed(1)}" y1="${t0[1].toFixed(1)}" x2="${t1[0].toFixed(1)}" y2="${t1[1].toFixed(1)}" stroke="#5C5140" stroke-width="1"/>`;
+  }
+  return `<div class="gauge${inR?'':' gout'}">
+    <svg viewBox="0 0 120 92">
+      <path d="${arc(210,-30,r)}" fill="none" stroke="#332B1E" stroke-width="7" stroke-linecap="round"/>
+      <path d="${arc(A(fLo),A(fHi),r)}" fill="none" stroke="#5A6B36" stroke-width="7" stroke-linecap="round"/>
+      ${ticks}
+      <line x1="${cx}" y1="${cy}" x2="${n[0].toFixed(1)}" y2="${n[1].toFixed(1)}" stroke="${needle}" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="${cx}" cy="${cy}" r="4.5" fill="var(--panel2)" stroke="${needle}" stroke-width="2"/>
+    </svg>
+    <div class="gval">${fmt(val)}</div>
+    <div class="glab">${label}</div>
+    <div class="grange">${t('cél')}: ${fmt(lo)} – ${fmt(hi)}</div>
   </div>`;
 }
 function styleGuideRows(r,c){
   const st=STYLES.find(s=>s[0]===r.styleId);
   if(!st) return '';
   const a1=st[2],a2=st[3],o1=st[4],o2=st[5],f1=st[6],f2=st[7],i1=st[8],i2=st[9],e1=st[10],e2=st[11];
-  return styleRow('ABV',c.abv,a1,a2,v=>v.toFixed(1)+'%')
-   + styleRow('OG',c.og,o1,o2,fmtSg)
-   + styleRow('FG',c.fg,f1,f2,fmtSg)
-   + styleRow('EBC',c.ebc,e1,e2,v=>fmt1(v))
-   + styleRow('IBU',c.ibu,i1,i2,v=>String(Math.round(v)))
-   + styleRow('BU/GU',c.bugu,i1/((o2-1)*1000),i2/((o1-1)*1000),v=>v.toFixed(2));
+  return '<div class="gauges">'
+   + gaugeSvg('ABV',c.abv,a1,a2,v=>v.toFixed(1)+'%')
+   + gaugeSvg('OG',c.og,o1,o2,fmtSg)
+   + gaugeSvg('FG',c.fg,f1,f2,fmtSg)
+   + gaugeSvg('EBC',c.ebc,e1,e2,v=>fmt1(v))
+   + gaugeSvg('IBU',c.ibu,i1,i2,v=>String(Math.round(v)))
+   + gaugeSvg('BU/GU',c.bugu,i1/((o2-1)*1000),i2/((o1-1)*1000),v=>v.toFixed(2))
+   + '</div>';
 }
 function styleGuideHtml(r,c){
   const st=STYLES.find(s=>s[0]===r.styleId);
   if(!st) return '';
-  return `<div class="panel style-panel"><div class="ph">${icon('book')}<h2>Stíluskalauz — ${st[0]} ${st[1]}</h2></div>
+  return `<div class="panel style-panel"><div class="ph">${icon('book')}<h2>${t('Stíluskalauz — ')}${st[0]} ${st[1]}</h2></div>
     <div class="pb" id="styleguide-body">${styleGuideRows(r,c)}</div></div>`;
 }
 function maltBarHtml(r,c){
@@ -602,86 +842,89 @@ function renderEdit(){
   const R = rowsHtml(r,c);
   app.innerHTML = `
   <div class="ed-top">
-    <button class="btn ghost" id="btn-back">← Receptek</button>
+    <button class="btn ghost" id="btn-back">${t('← Receptek')}</button>
     <input class="name-input" data-f="name" value="${esc(r.name)}">
     <span class="save-state" id="save-state"></span>
-    <button class="btn small" id="btn-dup">Duplikálás</button>
-    <button class="btn small danger" id="btn-del">Törlés</button>
+    <button class="btn small primary" id="btn-brew">${t('Főzet indítása')}</button>
+    <button class="btn small" id="btn-shop">${t('Bevásárlólista')}</button>
+    <button class="btn small" id="btn-print">${t('Nyomtatás')}</button>
+    <button class="btn small" id="btn-dup">${t('Duplikálás')}</button>
+    <button class="btn small danger" id="btn-del">${t('Törlés')}</button>
   </div>
   <div class="meta-row">
     <select id="style-select">
-      <option value="">— egyéni stílus —</option>
+      <option value="">${t('— egyéni stílus —')}</option>
       ${STYLES.map(s=>`<option value="${s[0]}" ${r.styleId===s[0]?'selected':''}>${s[0]} ${s[1]}</option>`).join('')}
     </select>
-    ${r.styleId?'':`<input data-f="style" value="${esc(r.style)}" placeholder="stílus neve">`}
-    <input data-f="author" value="${esc(r.author)}" placeholder="szerző">
+    ${r.styleId?'':`<input data-f="style" value="${esc(r.style)}" placeholder="${t('stílus neve')}">`}
+    <input data-f="author" value="${esc(r.author)}" placeholder="${t('szerző')}">
   </div>
   <div class="statbar">${statbarHtml(c)}</div>
   ${styleGuideHtml(r,c)}
   <div class="cols">
     <div>
-      <div class="panel"><div class="ph">${icon('grain')}<h2>Maláták</h2><span class="sum">${fmt2(c.totalKg)} kg</span></div>
+      <div class="panel"><div class="ph">${icon('grain')}<h2>${t('Maláták')}</h2><span class="sum">${fmt2(c.totalKg)} kg</span></div>
         <div class="pb">
           <div class="maltbar" id="maltbar">${maltBarHtml(r,c)}</div>
           <div class="rows">${R.fRows}</div>
-          <button class="btn small addrow" data-add="fermentables">+ Maláta</button>
+          <button class="btn small addrow" data-add="fermentables">${t('+ Maláta')}</button>
         </div>
       </div>
-      <div class="panel"><div class="ph">${icon('flask')}<h2>Élesztő</h2><span class="sum">lekötés: ${c.att}%</span></div>
+      <div class="panel"><div class="ph">${icon('flask')}<h2>${t('Élesztő')}</h2><span class="sum">${t('lekötés: ')}${c.att}%</span></div>
         <div class="pb">
           <div class="rows">${R.yRows}</div>
-          <button class="btn small addrow" data-add="yeasts">+ Élesztő</button>
+          <button class="btn small addrow" data-add="yeasts">${t('+ Élesztő')}</button>
         </div>
       </div>
-      <div class="panel"><div class="ph">${icon('thermo')}<h2>Cefrézés</h2></div>
+      <div class="panel"><div class="ph">${icon('thermo')}<h2>${t('Cefrézés')}</h2></div>
         <div class="pb">
           <div class="rows">${R.msRows}</div>
-          <button class="btn small addrow" data-add="mashSteps">+ Lépés</button>
+          <button class="btn small addrow" data-add="mashSteps">${t('+ Lépés')}</button>
         </div>
       </div>
-      <div class="panel"><div class="ph">${icon('drop')}<h2>Víz</h2></div>
+      <div class="panel"><div class="ph">${icon('drop')}<h2>${t('Víz')}</h2></div>
         <div class="pb water-grid">${waterHtml(c)}</div>
       </div>
     </div>
     <div>
-      <div class="panel"><div class="ph">${icon('hop')}<h2>Komlók</h2><span class="sum">${Math.round(c.totalHopG)} g · szárazk. ${(c.dryHopG/r.equip.batchL).toFixed(2)} g/L</span></div>
+      <div class="panel"><div class="ph">${icon('hop')}<h2>${t('Komlók')}</h2><span class="sum">${Math.round(c.totalHopG)} g${t(' · szárazk. ')}${(c.dryHopG/r.equip.batchL).toFixed(2)} g/L</span></div>
         <div class="pb">
           <div class="rows">${R.hRows}</div>
-          <button class="btn small addrow" data-add="hops">+ Komló</button>
+          <button class="btn small addrow" data-add="hops">${t('+ Komló')}</button>
           <div id="hopchart">${hopChartHtml(r,c)}</div>
           <div class="kv" style="margin-top:12px;max-width:300px">
-            <label>Hopstand hőmérséklet</label>
+            <label>${t('Hopstand hőmérséklet')}</label>
             <div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="hopstandTemp" value="${r.hopstandTemp}"><span>°C</span></div>
           </div>
         </div>
       </div>
-      <div class="panel"><div class="ph">${icon('bubbles')}<h2>Erjesztés</h2></div>
+      <div class="panel"><div class="ph">${icon('bubbles')}<h2>${t('Erjesztés')}</h2></div>
         <div class="pb">
           <div class="rows">${R.fsRows}</div>
-          <button class="btn small addrow" data-add="fermSteps">+ Szakasz</button>
+          <button class="btn small addrow" data-add="fermSteps">${t('+ Szakasz')}</button>
           <div class="kv" style="margin-top:12px;max-width:300px">
-            <label>Szénsav</label>
+            <label>${t('Szénsav')}</label>
             <div class="unit-in"><input type="number" step="0.1" inputmode="decimal" data-f="carbonation" value="${r.carbonation}"><span>CO₂ vol</span></div>
           </div>
         </div>
       </div>
-      <div class="panel"><div class="ph">${icon('jar')}<h2>Egyéb hozzávalók</h2></div>
+      <div class="panel"><div class="ph">${icon('jar')}<h2>${t('Egyéb hozzávalók')}</h2></div>
         <div class="pb">
           <div class="rows">${R.mRows}</div>
-          <button class="btn small addrow" data-add="misc">+ Hozzávaló</button>
+          <button class="btn small addrow" data-add="misc">${t('+ Hozzávaló')}</button>
         </div>
       </div>
-      <div class="panel"><div class="ph">${icon('sliders')}<h2>Főzet beállításai</h2></div>
+      <div class="panel"><div class="ph">${icon('sliders')}<h2>${t('Főzet beállításai')}</h2></div>
         <div class="pb kv">
-          <label>Adag térfogata</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" data-f="equip.batchL" value="${r.equip.batchL}"><span>L</span></div>
-          <label>Forralás</label><div class="unit-in"><input type="number" step="5" inputmode="numeric" data-f="equip.boilMin" value="${r.equip.boilMin}"><span>perc</span></div>
-          <label>Főzőházi hatásfok</label><div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="equip.brewhouseEff" value="${r.equip.brewhouseEff}"><span>%</span></div>
-          <label>Cefre-hatásfok</label><div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="equip.mashEff" value="${r.equip.mashEff}"><span>%</span></div>
+          <label>${t('Adag térfogata')}</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" data-f="equip.batchL" value="${r.equip.batchL}"><span>L</span></div>
+          <label>${t('Forralás')}</label><div class="unit-in"><input type="number" step="5" inputmode="numeric" data-f="equip.boilMin" value="${r.equip.boilMin}"><span>perc</span></div>
+          <label>${t('Főzőházi hatásfok')}</label><div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="equip.brewhouseEff" value="${r.equip.brewhouseEff}"><span>%</span></div>
+          <label>${t('Cefre-hatásfok')}</label><div class="unit-in"><input type="number" step="1" inputmode="numeric" data-f="equip.mashEff" value="${r.equip.mashEff}"><span>%</span></div>
         </div>
-        <div class="hint" style="padding:0 14px 14px">A párolgás, veszteségek és vízarányok a ⚙ Felszerelés alatt állíthatók — azok minden új receptre érvényesek.</div>
+        <div class="hint" style="padding:0 14px 14px">${t('A párolgás, veszteségek és vízarányok a ⚙ Felszerelés alatt állíthatók — azok minden új receptre érvényesek.')}</div>
       </div>
-      <div class="panel"><div class="ph">${icon('pencil')}<h2>Jegyzetek</h2></div>
-        <div class="pb"><textarea data-f="notes" placeholder="főzési jegyzetek, tapasztalatok…">${esc(r.notes)}</textarea></div>
+      <div class="panel"><div class="ph">${icon('pencil')}<h2>${t('Jegyzetek')}</h2></div>
+        <div class="pb"><textarea data-f="notes" placeholder="${t('főzési jegyzetek, tapasztalatok…')}">${esc(r.notes)}</textarea></div>
       </div>
     </div>
   </div>
@@ -704,16 +947,24 @@ function wireEdit(r){
   document.getElementById('btn-back').onclick = ()=>{ view={name:'list'}; render(); };
   document.getElementById('btn-dup').onclick = ()=>{
     const copy = JSON.parse(JSON.stringify(r));
-    copy.id = 'r'+Date.now(); copy.created = Date.now(); copy.name = r.name+' (másolat)';
+    copy.id = 'r'+Date.now(); copy.created = Date.now(); copy.name = r.name+' '+t('(másolat)');
     recipes.push(copy); scheduleSave(); view={name:'edit',id:copy.id}; render();
-    toast('Recept duplikálva');
+    toast(t('Recept duplikálva'));
   };
   document.getElementById('btn-del').onclick = ()=>{
-    if(confirm(`Biztos törlöd a(z) „${r.name}” receptet?`)){
+    if(confirm(t('Biztos törlöd a receptet:')+' '+r.name+'?')){
       recipes = recipes.filter(x=>x.id!==r.id); scheduleSave(); view={name:'list'}; render();
-      toast('Recept törölve');
+      toast(t('Recept törölve'));
     }
   };
+  document.getElementById('btn-brew').onclick = ()=>{
+    const b = newBatchFrom(r);
+    batches.push(b); scheduleSave();
+    view={name:'batch', id:b.id}; render();
+    toast(t('Főzet létrehozva — a recept pillanatképe elmentve'));
+  };
+  document.getElementById('btn-shop').onclick = ()=>openShoplist(r);
+  document.getElementById('btn-print').onclick = ()=>window.print();
   const styleSel = document.getElementById('style-select');
   if(styleSel){
     styleSel.addEventListener('change', ()=>{
@@ -808,28 +1059,648 @@ function refreshRowCalcs(r){
   });
 }
 
+/* ---------- főzetek (batch) ---------- */
+function newBatchFrom(r){
+  return {
+    id:'b'+Date.now()+Math.random().toString(36).slice(2,6),
+    recipeId:r.id, name:r.name,
+    date:new Date().toISOString().slice(0,10),
+    status:'tervezett',
+    snapshot:JSON.parse(JSON.stringify(r)),
+    measured:{preBoil:'',og:'',fg:'',vol:''},
+    rating:0, notes:'', checks:{}, readings:[]
+  };
+}
+function batchCalc(b){
+  const snap=b.snapshot, c=calc(snap);
+  const og=+b.measured.og||0, fg=+b.measured.fg||0;
+  const vol=+b.measured.vol||snap.equip.batchL;
+  const abv=(og>1&&fg>=1&&og>fg)?(og-fg)*131.25:null;
+  const att=(og>1&&fg>=1&&og>fg)?((og-fg)/(og-1)*100):null;
+  let eff=null;
+  if(og>1){
+    let rawGrain=0, sugar=0;
+    for(const f of snap.fermentables){
+      const kg=+f.amount||0, pot=(+f.potential||80)/100;
+      const raw=kg*pot*383.89;
+      if(pot>=0.96) sugar+=raw; else rawGrain+=raw;
+    }
+    if(rawGrain>0) eff=(((og-1)*1000*vol)-sugar)/rawGrain*100;
+  }
+  return {plan:c, abv, att, eff};
+}
+function brewDaySteps(r){
+  const c=calc(r); const steps=[];
+  steps.push({t:t('Vízbekészítés: ')+fmt2(c.mashWater)+t(' L cefrevíz')+(c.spargeWater>0.1?' + '+fmt2(c.spargeWater)+t(' L csurgatóvíz'):''), m:null});
+  r.mashSteps.forEach(s=>steps.push({t:`${s.name}: ${s.temp} °C — ${s.time} ${t('perc')}`, m:+s.time||null}));
+  if(c.spargeWater>0.1) steps.push({t:t('Csurgatás (')+fmt2(c.spargeWater)+' L, ~78 °C)', m:null});
+  steps.push({t:t('Forralás: ')+r.equip.boilMin+' '+t('perc'), m:+r.equip.boilMin||null});
+  r.hops.filter(h=>h.use==='boil').sort((a,b)=>(+b.time)-(+a.time)).forEach(h=>steps.push({t:`${h.amount} g ${h.name} — ${h.time}${t(' perccel a forralás vége előtt')}`, m:null}));
+  r.misc.filter(m=>m.when==='Forralás').forEach(m=>steps.push({t:`${m.name} (${m.amount})${t(' a forralásba')}`, m:null}));
+  const hst=r.hops.filter(h=>h.use==='hopstand');
+  if(hst.length){
+    steps.push({t:t('Hűtés ')+(r.hopstandTemp||80)+t(' °C-ra a hopstandhez'), m:null});
+    hst.forEach(h=>steps.push({t:t('Hopstand: ')+h.amount+' g '+h.name+' — '+h.time+' '+t('perc'), m:+h.time||null}));
+  }
+  r.misc.filter(m=>m.when==='Whirlpool').forEach(m=>steps.push({t:`${m.name} (${m.amount})${t(' — whirlpool')}`, m:null}));
+  steps.push({t:t('Hűtés erjesztési hőmérsékletre, átfejtés (cél: ')+r.equip.batchL+' L)', m:null});
+  if(r.yeasts.length) steps.push({t:t('Élesztő: ')+r.yeasts.map(y=>y.amount+t(' csomag ')+y.name).join(', '), m:null});
+  steps.push({t:t('Mért OG felírása a Mért értékek panelbe'), m:null});
+  r.hops.filter(h=>h.use==='dry').forEach(h=>steps.push({t:t('Szárazkomló: ')+h.amount+' g '+h.name+' — '+h.time+t(' nap'), m:null}));
+  r.misc.filter(m=>m.when==='Erjesztés').forEach(m=>steps.push({t:`${m.name} (${m.amount})${t(' az erjesztőbe')}`, m:null}));
+  return steps;
+}
+function batchResultsHtml(bc){
+  return `
+   <span class="wl">${t('Tényleges ABV')}</span><span class="wv">${bc.abv!=null?bc.abv.toFixed(1)+' %':'—'}</span>
+   <span class="wl">${t('Tényleges lekötés')}</span><span class="wv">${bc.att!=null?bc.att.toFixed(0)+' %':'—'}</span>
+   <span class="wl">${t('Tényleges főzőházi hatásfok')}</span><span class="wv">${bc.eff!=null?bc.eff.toFixed(1)+' %':'—'}</span>`;
+}
+function fermRowsHtml(b){
+  return b.readings.map((x,i)=>`<div class="irow" style="--cols:1fr 92px 76px 30px">
+    ${fld('Dátum',`<input type="date" data-fr="${i}:date" value="${x.date||''}">`,'fld-name')}
+    ${fld('SG',`<input type="number" step="0.001" inputmode="decimal" data-fr="${i}:sg" value="${x.sg}">`)}
+    ${fld('°C',`<input type="number" step="0.5" inputmode="decimal" data-fr="${i}:temp" value="${x.temp}">`)}
+    <div class="fld fld-rm"><span class="flab">&nbsp;</span><button data-frrm="${i}" title="törlés">×</button></div>
+  </div>`).join('');
+}
+function fermChartHtml(b){
+  const pts = b.readings.filter(x=>x.date && +x.sg>0).sort((a,c)=>a.date.localeCompare(c.date));
+  if(pts.length<2) return '<div class="hint" style="margin:0 0 10px">'+t('Vegyél fel legalább két SG-mérést, és itt kirajzolódik az erjedési görbe.')+'</div>';
+  const W=560,H=150,P=40;
+  const t0=new Date(pts[0].date).getTime();
+  const t1=Math.max(new Date(pts[pts.length-1].date).getTime(), t0+1);
+  const sgs=pts.map(p=>+p.sg);
+  let lo=Math.min(...sgs), hi=Math.max(...sgs);
+  if(hi-lo<0.004){ hi+=0.002; lo-=0.002; }
+  const X=t=>P+(W-P-10)*((t-t0)/(t1-t0));
+  const Y=v=>10+(H-10-22)*(1-(v-lo)/(hi-lo));
+  const line=pts.map(p=>X(new Date(p.date).getTime()).toFixed(1)+','+Y(+p.sg).toFixed(1)).join(' ');
+  const dots=pts.map(p=>`<circle cx="${X(new Date(p.date).getTime()).toFixed(1)}" cy="${Y(+p.sg).toFixed(1)}" r="3.5" fill="var(--gold)"/>`).join('');
+  const days=Math.round((t1-t0)/86400000);
+  return `<div class="fchart"><svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
+    <text x="2" y="${(Y(hi)+4).toFixed(1)}" font-size="10" fill="#A2957B" font-family="monospace">${hi.toFixed(3)}</text>
+    <text x="2" y="${(Y(lo)+4).toFixed(1)}" font-size="10" fill="#A2957B" font-family="monospace">${lo.toFixed(3)}</text>
+    <line x1="${P}" y1="${Y(hi).toFixed(1)}" x2="${W-10}" y2="${Y(hi).toFixed(1)}" stroke="#3A3122" stroke-dasharray="3 4"/>
+    <line x1="${P}" y1="${Y(lo).toFixed(1)}" x2="${W-10}" y2="${Y(lo).toFixed(1)}" stroke="#3A3122" stroke-dasharray="3 4"/>
+    <polyline points="${line}" fill="none" stroke="var(--gold)" stroke-width="2"/>
+    ${dots}
+    <text x="${W-10}" y="${H-4}" text-anchor="end" font-size="10" fill="#6E6350" font-family="monospace">${days} ${t('nap')}</text>
+  </svg></div>`;
+}
+function openShoplist(r){
+  const agg=(arr,key,amt)=>{ const m={}; for(const x of arr){ const n=(x[key]||'').trim(); if(!n) continue; m[n]=(m[n]||0)+(+x[amt]||0); } return Object.entries(m); };
+  const f=agg(r.fermentables,'name','amount'), h=agg(r.hops,'name','amount');
+  const items=[
+    ...f.map(([n,a])=>`${fmt2(a)} kg — ${n}`),
+    ...h.map(([n,a])=>`${Math.round(a)} g — ${n}`),
+    ...r.yeasts.filter(y=>y.name).map(y=>`${y.amount||1}${t(' csomag ')}— ${y.name}`),
+    ...r.misc.filter(m=>m.name).map(m=>`${m.amount||''} — ${m.name}`)
+  ];
+  const div=document.createElement('div'); div.className='modal-bg';
+  div.innerHTML=`<div class="modal"><div class="ph"><h2>${t('Bevásárlólista')} — ${esc(r.name)}</h2><div class="spacer"></div><button class="btn small" id="sh-close">${t('Bezár')}</button></div>
+   <div class="pb check-list">${items.map(t=>`<label class="chk"><input type="checkbox"><span>${esc(t)}</span></label>`).join('')||'<div class="hint">'+t('Nincs hozzávaló a receptben.')+'</div>'}</div>
+   <div class="pf"><button class="btn" id="sh-copy">${t('Másolás vágólapra')}</button></div></div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click', e=>{ if(e.target===div) div.remove(); });
+  div.querySelector('#sh-close').onclick=()=>div.remove();
+  div.querySelectorAll('.chk input').forEach(c=>c.onchange=()=>c.closest('.chk').classList.toggle('done', c.checked));
+  div.querySelector('#sh-copy').onclick=()=>{
+    const txt=t('Bevásárlólista')+' — '+r.name+String.fromCharCode(10)+items.map(t=>'- '+t).join(String.fromCharCode(10));
+    try{ navigator.clipboard.writeText(txt); toast(t('Vágólapra másolva')); }
+    catch(e){ toast(t('Nem sikerült másolni')); }
+  };
+}
+function renderBatchEdit(){
+  const b = batches.find(x=>x.id===view.id);
+  if(!b){ view={name:'list'}; listTab='batches'; return renderList(); }
+  if(!b.readings) b.readings=[];
+  const bc = batchCalc(b);
+  const steps = brewDaySteps(b.snapshot);
+  const done = Object.values(b.checks).filter(Boolean).length;
+  const recipeExists = recipes.some(x=>x.id===b.recipeId);
+  app.innerHTML = `
+  <div class="ed-top">
+    <button class="btn ghost" id="bb-back">${t('← Főzetek')}</button>
+    <span class="name-input" style="cursor:default">${esc(b.name)}</span>
+    <span class="save-state" id="save-state"></span>
+    ${recipeExists?'<button class="btn small" id="bb-recipe">'+t('Recept')+'</button>':''}
+    <button class="btn small danger" id="bb-del">${t('Törlés')}</button>
+  </div>
+  <div class="meta-row" style="align-items:center">
+    <input type="date" id="bb-date" value="${b.date}" style="max-width:170px">
+    <select id="bb-status" style="max-width:150px">
+      ${['tervezett','erjed','kesz'].map(s=>`<option value="${s}" ${b.status===s?'selected':''}>${t(stLab[s])}</option>`).join('')}
+    </select>
+    <div class="stars" id="bb-stars" title="${t('értékelés')}">${[1,2,3,4,5].map(i=>`<span data-star="${i}" class="${i<=b.rating?'on':''}">★</span>`).join('')}</div>
+  </div>
+  <div class="cols">
+   <div>
+    <div class="panel"><div class="ph">${icon('flask')}<h2>${t('Mért értékek')}</h2></div>
+      <div class="pb kv">
+        <label>${t('Forralás előtti SG')} <small style="color:var(--dim)">(${t('terv')} ${fmtSg(bc.plan.preBoilOg)})</small></label><input type="number" step="0.001" inputmode="decimal" data-bm="preBoil" value="${b.measured.preBoil}" placeholder="${fmtSg(bc.plan.preBoilOg)}">
+        <label>OG <small style="color:var(--dim)">(${t('terv')} ${fmtSg(bc.plan.og)})</small></label><input type="number" step="0.001" inputmode="decimal" data-bm="og" value="${b.measured.og}" placeholder="${fmtSg(bc.plan.og)}">
+        <label>FG <small style="color:var(--dim)">(${t('terv')} ${fmtSg(bc.plan.fg)})</small></label><input type="number" step="0.001" inputmode="decimal" data-bm="fg" value="${b.measured.fg}" placeholder="${fmtSg(bc.plan.fg)}">
+        <label>${t('Térfogat az erjesztőben')}</label><div class="unit-in"><input type="number" step="0.1" inputmode="decimal" data-bm="vol" value="${b.measured.vol}" placeholder="${b.snapshot.equip.batchL}"><span>L</span></div>
+      </div>
+      <div class="pb water-grid" id="bb-results" style="padding-top:0">${batchResultsHtml(bc)}</div>
+      <div class="hint" style="padding:0 14px 14px">${t('Tipp: hidrométeres mérésnél a hőmérséklet-korrekciót a Kalkulátorok alatt találod.')}</div>
+    </div>
+    <div class="panel"><div class="ph">${icon('bubbles')}<h2>${t('Erjedési napló')}</h2></div>
+      <div class="pb">
+        <div id="fchart">${fermChartHtml(b)}</div>
+        <div class="rows" id="fr-rows">${fermRowsHtml(b)}</div>
+        <button class="btn small addrow" id="fr-add">${t('+ Mérés')}</button>
+      </div>
+    </div>
+    <div class="panel"><div class="ph">${icon('pencil')}<h2>${t('Jegyzetek')}</h2></div>
+      <div class="pb"><textarea id="bb-notes" placeholder="${t('kóstolási jegyzet, mit csinálnál másképp…')}">${esc(b.notes)}</textarea></div>
+    </div>
+   </div>
+   <div>
+    <div class="panel"><div class="ph">${icon('thermo')}<h2>${t('Főzésnap')}</h2><span class="sum" id="bb-prog">${done}/${steps.length}</span></div>
+      <div class="pb check-list">
+        ${steps.map((s,i)=>`<label class="chk ${b.checks[i]?'done':''}"><input type="checkbox" data-chk="${i}" ${b.checks[i]?'checked':''}><span>${s.t}</span>${s.m?`<button class="btn small" data-timer="${s.m}" data-tlabel="${esc(s.t)}">⏱ ${s.m} p</button>`:''}</label>`).join('')}
+      </div>
+    </div>
+   </div>
+  </div>`;
+  setSaveState('Mentve');
+  document.getElementById('bb-back').onclick = ()=>{ view={name:'list'}; listTab='batches'; render(); };
+  const rb=document.getElementById('bb-recipe');
+  if(rb) rb.onclick = ()=>{ view={name:'edit', id:b.recipeId}; render(); };
+  document.getElementById('bb-del').onclick = ()=>{
+    if(confirm(t('Biztos törlöd ezt a főzetet?')+' ('+b.name+', '+b.date+')')){
+      batches = batches.filter(x=>x.id!==b.id); scheduleSave();
+      view={name:'list'}; listTab='batches'; render(); toast(t('Főzet törölve'));
+    }
+  };
+  document.getElementById('bb-date').addEventListener('change', e=>{ b.date=e.target.value; scheduleSave(); });
+  document.getElementById('bb-status').addEventListener('change', e=>{ b.status=e.target.value; scheduleSave(); });
+  document.getElementById('bb-notes').addEventListener('input', e=>{ b.notes=e.target.value; scheduleSave(); });
+  document.querySelectorAll('#bb-stars [data-star]').forEach(s=>{
+    s.onclick = ()=>{
+      const v=+s.dataset.star;
+      b.rating = (b.rating===v) ? 0 : v;
+      scheduleSave();
+      document.querySelectorAll('#bb-stars [data-star]').forEach(x=>x.classList.toggle('on', +x.dataset.star<=b.rating));
+    };
+  });
+  app.querySelectorAll('[data-bm]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      b.measured[inp.dataset.bm] = inp.value===''?'':+inp.value;
+      scheduleSave();
+      const res=document.getElementById('bb-results');
+      if(res) res.innerHTML = batchResultsHtml(batchCalc(b));
+    });
+  });
+  app.querySelectorAll('[data-chk]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      b.checks[cb.dataset.chk] = cb.checked;
+      cb.closest('.chk').classList.toggle('done', cb.checked);
+      const p=document.getElementById('bb-prog');
+      if(p) p.textContent = Object.values(b.checks).filter(Boolean).length+'/'+steps.length;
+      scheduleSave();
+    });
+  });
+  function rewireReadings(){
+    app.querySelectorAll('[data-fr]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{
+        const p=inp.dataset.fr.split(':');
+        b.readings[+p[0]][p[1]] = p[1]==='date' ? inp.value : (inp.value===''?'':+inp.value);
+        scheduleSave();
+        const ch=document.getElementById('fchart'); if(ch) ch.innerHTML=fermChartHtml(b);
+      });
+    });
+    app.querySelectorAll('[data-frrm]').forEach(bt=>{
+      bt.onclick=()=>{ b.readings.splice(+bt.dataset.frrm,1); scheduleSave(); redrawReadings(); };
+    });
+  }
+  function redrawReadings(){
+    document.getElementById('fr-rows').innerHTML=fermRowsHtml(b);
+    document.getElementById('fchart').innerHTML=fermChartHtml(b);
+    rewireReadings();
+  }
+  document.getElementById('fr-add').onclick=()=>{
+    b.readings.push({date:new Date().toISOString().slice(0,10), sg:'', temp:''});
+    scheduleSave(); redrawReadings();
+  };
+  rewireReadings();
+  app.querySelectorAll('[data-timer]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.preventDefault(); e.stopPropagation();
+      startTimer(+btn.dataset.timer, btn.dataset.tlabel);
+    });
+  });
+}
+
+/* ---------- időzítő ---------- */
+let timerState = null;
+function startTimer(min, label){
+  stopTimer();
+  timerState = {end: Date.now()+min*60000, label, int: setInterval(tickTimer, 500)};
+  const d=document.createElement('div');
+  d.id='timerbar'; d.className='timerbar';
+  d.innerHTML=`<span id="timer-label"></span><b id="timer-left"></b><button class="btn small" id="timer-stop">${t('Leállít')}</button>`;
+  document.body.appendChild(d);
+  d.querySelector('#timer-stop').onclick = stopTimer;
+  tickTimer();
+  toast(t('⏱ Időzítő elindítva: ')+min+t(' perc'));
+}
+function tickTimer(){
+  if(!timerState) return;
+  const left = timerState.end - Date.now();
+  if(left<=0){ beep(); toast(t('⏱ Lejárt: ')+timerState.label); stopTimer(); return; }
+  const s=Math.ceil(left/1000);
+  const l=document.getElementById('timer-label'), v=document.getElementById('timer-left');
+  if(l) l.textContent = timerState.label;
+  if(v) v.textContent = Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+}
+function stopTimer(){
+  if(timerState){ clearInterval(timerState.int); timerState=null; }
+  const d=document.getElementById('timerbar'); if(d) d.remove();
+}
+function beep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.4,0.8].forEach(t=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value=880;
+      g.gain.setValueAtTime(0.3, ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+0.35);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.37);
+    });
+  }catch(e){}
+}
+
+/* ---------- kalkulátorok ---------- */
+function hydroCorr(sg, tC, calC){
+  const F=c=>c*9/5+32;
+  const k=x=>1.00130346 - 1.34722124e-4*x + 2.04052596e-6*x*x - 2.32820948e-9*x*x*x;
+  return sg * k(F(tC)) / k(F(calC));
+}
+function brixToSg(bx){ return 1 + bx/(258.6 - (bx/258.2)*227.1); }
+function openCalc(){
+  const div=document.createElement('div');
+  div.className='modal-bg';
+  div.innerHTML=`<div class="modal wide">
+    <div class="ph"><h2>${t('Kalkulátorok')}</h2><div class="spacer"></div><button class="btn small" id="c-close">${t('Bezár')}</button></div>
+    <div class="pb">
+      <div class="calc-sec">
+        <h3>${t('Hidrométer hőmérséklet-korrekció')}</h3>
+        <div class="kv">
+          <label>${t('Mért SG')}</label><input type="number" step="0.001" inputmode="decimal" id="c-h-sg" value="1.050">
+          <label>${t('Minta hőmérséklete')}</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" id="c-h-t" value="45"><span>°C</span></div>
+          <label>${t('Hidrométer kalibrációja')}</label><div class="unit-in"><input type="number" step="1" inputmode="decimal" id="c-h-cal" value="20"><span>°C</span></div>
+          <label>${t('Korrigált SG')}</label><span class="cres" id="c-h-res">—</span>
+        </div>
+      </div>
+      <div class="calc-sec">
+        <h3>${t('Refraktométer')}</h3>
+        <div class="kv">
+          <label>${t('Brix erjedés előtt')}</label><input type="number" step="0.1" inputmode="decimal" id="c-r-ob" value="13">
+          <label>${t('Brix erjedés közben/után')} <small style="color:var(--dim)">${t('(üresen: csak OG)')}</small></label><input type="number" step="0.1" inputmode="decimal" id="c-r-fb" value="">
+          <label>${t('Korrekciós faktor (WCF)')}</label><input type="number" step="0.01" inputmode="decimal" id="c-r-wcf" value="1.04">
+          <label>${t('Eredmény')}</label><span class="cres" id="c-r-res">—</span>
+        </div>
+      </div>
+      <div class="calc-sec">
+        <h3>${t('ABV mért értékekből')}</h3>
+        <div class="kv">
+          <label>OG</label><input type="number" step="0.001" inputmode="decimal" id="c-a-og" value="1.055">
+          <label>FG</label><input type="number" step="0.001" inputmode="decimal" id="c-a-fg" value="1.010">
+          <label>ABV</label><span class="cres" id="c-a-res">—</span>
+        </div>
+      </div>
+      <div class="calc-sec">
+        <h3>${t('Előcukrozás (palack/hordó)')}</h3>
+        <div class="kv">
+          <label>${t('Sör mennyisége')}</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" id="c-p-l" value="20"><span>L</span></div>
+          <label>${t('Cél szénsav')}</label><div class="unit-in"><input type="number" step="0.1" inputmode="decimal" id="c-p-vol" value="2.4"><span>CO₂ vol</span></div>
+          <label>${t('Sör hőmérséklete')}</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" id="c-p-t" value="20"><span>°C</span></div>
+          <label>${t('Dextróz')}</label><span class="cres" id="c-p-res">—</span>
+        </div>
+      </div>
+      <div class="calc-sec">
+        <h3>${t('Sópótlás (vízkémia)')}</h3>
+        <div class="kv">
+          <label>${t('Víz mennyisége')}</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" id="c-s-l" value="30"><span>L</span></div>
+          <label>${t('Gipsz (CaSO₄)')}</label><div class="unit-in"><input type="number" step="0.1" inputmode="decimal" id="c-s-gy" value="0"><span>g</span></div>
+          <label>${t('Kalcium-klorid (CaCl₂)')}</label><div class="unit-in"><input type="number" step="0.1" inputmode="decimal" id="c-s-cc" value="0"><span>g</span></div>
+          <label>${t('Keserűsó (MgSO₄)')}</label><div class="unit-in"><input type="number" step="0.1" inputmode="decimal" id="c-s-ep" value="0"><span>g</span></div>
+          <label>${t('Konyhasó (NaCl)')}</label><div class="unit-in"><input type="number" step="0.1" inputmode="decimal" id="c-s-na" value="0"><span>g</span></div>
+        </div>
+        <div class="water-grid" style="margin-top:10px" id="c-s-res"></div>
+        <div class="hint">${t('A hozzáadott ionokat mutatja (a csapvized saját tartalma ehhez még hozzájön). NEIPA-hoz jellemzően a klorid, keserű IPA-hoz a szulfát dominál.')}</div>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click', e=>{ if(e.target===div) div.remove(); });
+  div.querySelector('#c-close').onclick = ()=>div.remove();
+  const $=id=>div.querySelector('#'+id);
+  const num=id=>parseFloat($(id).value)||0;
+  function recalcAll(){
+    /* hidrométer */
+    const hs=num('c-h-sg');
+    $('c-h-res').textContent = hs>0 ? hydroCorr(hs, num('c-h-t'), num('c-h-cal')).toFixed(3) : '—';
+    /* refraktométer */
+    const wcf=num('c-r-wcf')||1.04;
+    const ob=num('c-r-ob')/wcf;
+    const fbRaw=$('c-r-fb').value;
+    if(ob>0 && fbRaw===''){
+      $('c-r-res').textContent = 'OG: '+brixToSg(ob).toFixed(3);
+    } else if(ob>0){
+      const fb=(parseFloat(fbRaw)||0)/wcf;
+      const fg=1.0000 - 0.000856829*ob + 0.00349412*fb;
+      const og=brixToSg(ob);
+      const abv=(og-fg)*131.25;
+      $('c-r-res').textContent = 'FG: '+fg.toFixed(3)+' · ABV: '+abv.toFixed(1)+'%';
+    } else $('c-r-res').textContent='—';
+    /* ABV */
+    const og=num('c-a-og'), fg=num('c-a-fg');
+    if(og>1&&fg>=0.98&&og>fg){
+      const simple=(og-fg)*131.25;
+      const precise=(76.08*(og-fg)/(1.775-og))*(fg/0.794);
+      $('c-a-res').textContent = simple.toFixed(2)+'% '+t('(pontosított: ')+precise.toFixed(2)+'%)';
+    } else $('c-a-res').textContent='—';
+    /* előcukrozás */
+    const L=num('c-p-l'), tv=num('c-p-vol'), tc=num('c-p-t');
+    if(L>0&&tv>0){
+      const tf=tc*9/5+32;
+      const res=Math.max(3.0378 - 0.050062*tf + 0.00026555*tf*tf, 0);
+      const g=Math.max(4.0*(tv-res)*L, 0);
+      $('c-p-res').textContent = Math.round(g)+t(' g összesen (')+(g/L).toFixed(1)+' g/L)'+t(' · maradék CO₂: ')+res.toFixed(2)+' vol';
+    } else $('c-p-res').textContent='—';
+    /* sópótlás */
+    const wl=num('c-s-l');
+    if(wl>0){
+      const gy=num('c-s-gy')/wl, cc=num('c-s-cc')/wl, ep=num('c-s-ep')/wl, na=num('c-s-na')/wl;
+      const Ca=gy*232.8+cc*272.6, SO4=gy*557.7+ep*389.6, Cl=cc*482.3+na*606.7, Mg=ep*98.6, Na=na*393.4;
+      const ratio=SO4>0?(Cl/SO4):null;
+      $('c-s-res').innerHTML = `
+        <span class="wl">${t('Kalcium (Ca²⁺)')}</span><span class="wv">+${Ca.toFixed(0)} ppm</span>
+        <span class="wl">${t('Szulfát (SO₄²⁻)')}</span><span class="wv">+${SO4.toFixed(0)} ppm</span>
+        <span class="wl">${t('Klorid (Cl⁻)')}</span><span class="wv">+${Cl.toFixed(0)} ppm</span>
+        <span class="wl">${t('Magnézium (Mg²⁺)')}</span><span class="wv">+${Mg.toFixed(0)} ppm</span>
+        <span class="wl">${t('Nátrium (Na⁺)')}</span><span class="wv">+${Na.toFixed(0)} ppm</span>
+        <span class="wl">${t('Klorid : szulfát arány')}</span><span class="wv">${ratio!=null?ratio.toFixed(2):'—'}</span>`;
+    } else $('c-s-res').innerHTML='';
+  }
+  div.querySelectorAll('input').forEach(i=>i.addEventListener('input', recalcAll));
+  recalcAll();
+}
+
+/* ---------- könyvtár ---------- */
+function libRecipe(o){
+  const r = newRecipe();
+  r.name=o.name; r.styleId=o.styleId;
+  const st=STYLES.find(s=>s[0]===o.styleId);
+  r.style = st ? st[0]+' '+st[1] : o.styleId;
+  r.author='Főzde könyvtár';
+  r.fermentables=o.f.map(x=>({name:x[0],amount:x[1],ebc:x[2],potential:x[3]}));
+  r.hops=(o.h||[]).map(x=>({name:x[0],amount:x[1],alpha:x[2],use:x[3],time:x[4]}));
+  r.yeasts=[{name:o.y[0],amount:1,attenuation:o.y[1]}];
+  if(o.misc) r.misc=o.misc.map(x=>({name:x[0],amount:x[1],when:x[2]}));
+  if(o.mash) r.mashSteps=o.mash.map(x=>({name:x[0],temp:x[1],time:x[2]}));
+  if(o.ferm) r.fermSteps=o.ferm.map(x=>({name:x[0],temp:x[1],days:x[2]}));
+  if(o.hst) r.hopstandTemp=o.hst;
+  if(o.carb) r.carbonation=o.carb;
+  if(o.notes) r.notes=o.notes;
+  return r;
+}
+const LIBRARY = [
+ {name:'Ködös reggel NEIPA', styleId:'21B',
+  f:[['Extra Pale (Golden Promise)',3.8,4,82],['Zabpehely (flaked oats)',0.8,2,70],['Búzapehely (flaked wheat)',0.8,2,72],['Carapils/Carafoam',0.3,4,75]],
+  h:[['Citra',60,12,'hopstand',20],['Mosaic',60,11.5,'hopstand',20],['Citra',60,12,'dry',3],['Mosaic',60,11.5,'dry',3],['Galaxy',40,15,'dry',3]],
+  y:['Verdant IPA (Lallemand)',78], mash:[['Cefrézés',67,60],['Kicefrézés',75,10]], ferm:[['Főerjesztés',19,10]], hst:80, carb:2.3,
+  notes:'Klasszikus modern NEIPA: minden komló a forralás után. Szárazkomló az aktív erjedés vége felé.'},
+ {name:'Nyugati parti IPA', styleId:'21A',
+  f:[['Pale Ale (Weyermann)',5.0,6,81],['Munich I (Weyermann)',0.4,14,80],['Carapils/Carafoam',0.25,4,75]],
+  h:[['Magnum',18,13,'boil',30],['Simcoe',25,13,'boil',10],['Centennial',30,10,'hopstand',15],['Simcoe',45,13,'dry',3],['Centennial',45,10,'dry',3]],
+  y:['SafAle US-05',78], mash:[['Cefrézés',65,60],['Kicefrézés',75,10]], ferm:[['Főerjesztés',19,12]], carb:2.4,
+  notes:'Száraz, keserű, gyantás. Gipszes víz (magas szulfát) illik hozzá.'},
+ {name:'Amerikai Pale Ale', styleId:'18B',
+  f:[['Pale Ale (Weyermann)',4.3,6,81],['CaraHell',0.3,25,75]],
+  h:[['Cascade',15,6.5,'boil',30],['Cascade',25,6.5,'boil',10],['Cascade',30,6.5,'hopstand',15],['Centennial',40,10,'dry',4]],
+  y:['SafAle US-05',78], ferm:[['Főerjesztés',19,10]], carb:2.4,
+  notes:'Egyszerű, megbízható házi kedvenc — jó első főzet is.'},
+ {name:'Német pilzeni', styleId:'2A',
+  f:[['Pilsner (Weyermann)',4.5,3.5,81]],
+  h:[['Perle',28,8,'boil',30],['Hallertau Mittelfrüh',20,4,'boil',10]],
+  y:['SafLager W-34/70',82], mash:[['Cefrézés',65,60],['Kicefrézés',75,10]],
+  ferm:[['Főerjesztés',11,14],['Lagerezés',2,21]], carb:2.5,
+  notes:'Türelemjáték: hideg erjesztés és min. 3 hét lagerezés. Lágy víz illik hozzá.'},
+ {name:'Müncheni Helles', styleId:'4A',
+  f:[['Pilsner (Weyermann)',4.2,3.5,81],['Munich I (Weyermann)',0.3,14,80]],
+  h:[['Perle',20,8,'boil',30],['Hallertau Mittelfrüh',15,4,'boil',10]],
+  y:['SafLager W-34/70',82], ferm:[['Főerjesztés',11,14],['Lagerezés',2,21]], carb:2.4,
+  notes:'Malátás, kerek, ivós — a müncheni sörkertek söre.'},
+ {name:'Witbier', styleId:'24A',
+  f:[['Pilsner (Weyermann)',2.4,3.5,81],['Búzapehely (flaked wheat)',2.0,2,72],['Zabpehely (flaked oats)',0.3,2,70]],
+  h:[['Saaz',22,3.5,'boil',30]],
+  y:['SafAle T-58',75],
+  misc:[['Őrölt koriander','15 g','Whirlpool'],['Keserű narancshéj','20 g','Whirlpool']],
+  ferm:[['Főerjesztés',20,10]], carb:2.6,
+  notes:'Zavaros belga búza koriander­rel és narancshéjjal. A pelyhek miatt lassabb csurgatásra számíts.'},
+ {name:'Saison', styleId:'25B',
+  f:[['Pilsner (Weyermann)',4.0,3.5,81],['Wheat Malt, Pale (Weyermann)',0.5,4,82],['Dextróz (cukor)',0.3,0,100]],
+  h:[['Saaz',28,3.5,'boil',30],['Styrian Golding',20,5,'boil',10]],
+  y:['SafAle BE-134 (saison)',89],
+  ferm:[['Főerjesztés',23,7],['Utóerjesztés',26,7]], carb:2.8,
+  notes:'Szárazra erjed, borsos-fűszeres. Hagyd melegedni az erjedés vége felé.'},
+ {name:'Belga tripel', styleId:'26C',
+  f:[['Pilsner (Weyermann)',6.0,3.5,81],['Dextróz (cukor)',0.8,0,100]],
+  h:[['Saaz',35,3.5,'boil',30],['Styrian Golding',20,5,'boil',10]],
+  y:['SafAle BE-256 (Abbaye)',82], ferm:[['Főerjesztés',21,14]], carb:2.8,
+  notes:'Erős, mégis száraz és világos — a cukor a titka.'},
+ {name:'Belga dubbel', styleId:'26B',
+  f:[['Pilsner (Weyermann)',4.6,3.5,81],['Munich I (Weyermann)',0.5,14,80],['CaraMunich II',0.3,120,74],['Carafa Special II',0.05,830,70],['Nádcukor',0.4,0,100]],
+  h:[['East Kent Golding',30,5.5,'boil',30]],
+  y:['SafAle BE-256 (Abbaye)',82], ferm:[['Főerjesztés',21,12]], carb:2.6,
+  notes:'Aszalt gyümölcsös, karamelles apátsági barna.'},
+ {name:'Angol porter', styleId:'20A',
+  f:[['Pale Malt, Maris Otter',4.2,5,82],['Crystal 60L',0.35,118,74],['Chocolate Malt',0.35,900,68],['Búzapehely (flaked wheat)',0.2,2,72]],
+  h:[['East Kent Golding',35,5.5,'boil',30],['Fuggle',20,4.5,'boil',10]],
+  y:['SafAle S-04',75], mash:[['Cefrézés',67,60],['Kicefrézés',75,10]], carb:2.2,
+  notes:'Kávés-csokis, de könnyebb, mint egy stout.'},
+ {name:'Zab stout', styleId:'16A',
+  f:[['Pale Malt, Maris Otter',3.8,5,82],['Zabpehely (flaked oats)',0.5,2,70],['Roasted Barley',0.35,1200,68],['Chocolate Malt',0.25,900,68],['Laktóz',0.3,0,76]],
+  h:[['Magnum',20,13,'boil',30]],
+  y:['SafAle S-04',75], mash:[['Cefrézés',68,60],['Kicefrézés',75,10]], carb:2.2,
+  notes:'Selymes, kicsit édes stout — a laktóz nem erjed ki.'},
+ {name:'Bécsi lager', styleId:'7A',
+  f:[['Vienna (Weyermann)',3.6,8,80],['Munich I (Weyermann)',1.2,14,80],['CaraMunich II',0.15,120,74]],
+  h:[['Hallertau Mittelfrüh',30,4,'boil',30],['Hallertau Mittelfrüh',15,4,'boil',10]],
+  y:['SafLager W-34/70',82], ferm:[['Főerjesztés',11,14],['Lagerezés',2,21]], carb:2.5,
+  notes:'Borostyán, kenyérhéjas maláta, tiszta lezárás.'},
+ {name:'Punk IPA klón', styleId:'21A',
+  f:[['Extra Pale (Golden Promise)',4.8,4,82],['Carapils/Carafoam',0.2,4,75]],
+  h:[['Chinook',15,13,'boil',30],['Chinook',20,13,'boil',10],['Amarillo',20,9,'boil',10],['Chinook',30,13,'hopstand',15],['Amarillo',30,9,'hopstand',15],['Chinook',40,13,'dry',4],['Amarillo',40,9,'dry',4],['Simcoe',30,13,'dry',4]],
+  y:['SafAle US-05',78], ferm:[['Főerjesztés',19,10]], carb:2.4,
+  notes:'A BrewDog klasszikusának házi változata: tiszta malátaalap, agresszív amerikai komlózás.'},
+ {name:'Sierra Nevada Pale Ale klón', styleId:'18B',
+  f:[['Pale Ale (Weyermann)',4.6,6,81],['Crystal 60L',0.3,118,74]],
+  h:[['Magnum',14,13,'boil',30],['Perle',15,8,'boil',10],['Cascade',30,6.5,'boil',10],['Cascade',30,6.5,'hopstand',15],['Cascade',30,6.5,'dry',4]],
+  y:['SafAle US-05',78], ferm:[['Főerjesztés',19,10]], carb:2.4,
+  notes:'Az amerikai pale ale ősképe — a Cascade komló a főszereplő.'},
+ {name:'Guinness klón', styleId:'15B',
+  f:[['Pale Malt, Maris Otter',3.0,5,82],['Árpapehely (flaked barley)',0.9,2,70],['Roasted Barley',0.45,1200,68]],
+  h:[['East Kent Golding',38,5.5,'boil',30]],
+  y:['SafAle S-04',75], mash:[['Cefrézés',66,60],['Kicefrézés',75,10]], carb:1.8,
+  notes:'Száraz ír stout: pörkölt árpa + árpapehely. Alacsony szénsavval az igazi, nitrogén nélkül is.'},
+ {name:'Pilsner Urquell klón', styleId:'3B',
+  f:[['Pilsner (Weyermann)',4.7,3.5,81],['CaraHell',0.15,25,75]],
+  h:[['Saaz',45,3.5,'boil',30],['Saaz',25,3.5,'boil',10],['Saaz',15,3.5,'hopstand',10]],
+  y:['SafLager W-34/70',82], mash:[['Cefrézés',65,60],['Kicefrézés',75,10]],
+  ferm:[['Főerjesztés',10,14],['Lagerezés',2,28]], carb:2.5,
+  notes:'A cseh pils etalonja. Az eredeti dekokciós cefrézésű — a CaraHell ezt a malátásságot pótolja kicsit.'},
+ {name:'Weihenstephaner Hefe klón', styleId:'10A',
+  f:[['Wheat Malt, Pale (Weyermann)',2.8,4,82],['Pilsner (Weyermann)',2.2,3.5,81]],
+  h:[['Hallertau Mittelfrüh',18,4,'boil',30]],
+  y:['SafBrew WB-06 (búza)',82], mash:[['Fehérjepihenő',45,15],['Cefrézés',65,50],['Kicefrézés',75,10]],
+  ferm:[['Főerjesztés',20,10]], carb:3.0,
+  notes:'Banános-szegfűszeges bajor búza. A fehérjepihenő segít a habnak és a szegfűszeges karakternek.'},
+ {name:'Duvel klón', styleId:'25C',
+  f:[['Pilsner (Weyermann)',5.6,3.5,81],['Dextróz (cukor)',1.0,0,100]],
+  h:[['Saaz',40,3.5,'boil',30],['Styrian Golding',25,5,'boil',10]],
+  y:['SafAle BE-256 (Abbaye)',82], ferm:[['Főerjesztés',22,14],['Hidegérlelés',4,21]], carb:3.0,
+  notes:'Világos belga erős: ördögien iható a 8,5% ellenére. A sok cukor szárítja ki.'},
+ {name:'Hazy Jane klón', styleId:'21B',
+  f:[['Extra Pale (Golden Promise)',3.2,4,82],['Zabpehely (flaked oats)',0.6,2,70],['Búzapehely (flaked wheat)',0.6,2,72],['Carapils/Carafoam',0.25,4,75]],
+  h:[['Citra',40,12,'hopstand',20],['Mosaic',40,11.5,'hopstand',20],['Simcoe',30,13,'hopstand',20],['Citra',50,12,'dry',3],['Mosaic',50,11.5,'dry',3]],
+  y:['Verdant IPA (Lallemand)',78], mash:[['Cefrézés',67,60],['Kicefrézés',75,10]], hst:80, carb:2.3,
+  notes:'Könnyedebb, gyümölcslé-szerű NEIPA a BrewDog-tól ellesve.'},
+ {name:'London Pride klón', styleId:'11B',
+  f:[['Pale Malt, Maris Otter',3.6,5,82],['Crystal 60L',0.25,118,74]],
+  h:[['East Kent Golding',28,5.5,'boil',30],['Fuggle',15,4.5,'boil',10],['East Kent Golding',10,5.5,'hopstand',10]],
+  y:['SafAle S-04',75], carb:1.9,
+  notes:'Kiegyensúlyozott angol bitter — kevés szénsav, sok kortyolhatóság.'},
+ {name:'Augustiner Helles klón', styleId:'4A',
+  f:[['Pilsner (Weyermann)',4.4,3.5,81],['Munich I (Weyermann)',0.25,14,80]],
+  h:[['Hallertau Mittelfrüh',22,4,'boil',30],['Hallertau Mittelfrüh',12,4,'boil',10]],
+  y:['SafLager W-34/70',82], ferm:[['Főerjesztés',10,14],['Lagerezés',2,28]], carb:2.4,
+  notes:'A müncheniek kedvence: lágy, malátás, veszélyesen iható. Lágy víz + türelem kell hozzá.'},
+ {name:'Rochefort 8 klón', styleId:'26D',
+  f:[['Pilsner (Weyermann)',5.6,3.5,81],['Munich I (Weyermann)',0.4,14,80],['CaraMunich III',0.3,150,74],['Carafa Special II',0.08,830,70],['Nádcukor',0.9,0,100]],
+  h:[['East Kent Golding',30,5.5,'boil',30]],
+  y:['SafAle BE-256 (Abbaye)',82], ferm:[['Főerjesztés',22,14],['Érlelés',12,30]], carb:2.7,
+  notes:'Trappista sötét erős: aszalt szilva, karamell, meleg alkohol. A nádcukrot sötét kandiszcukorral cserélve még hitelesebb.'},
+ {name:'Session NEIPA', styleId:'21B',
+  f:[['Extra Pale (Golden Promise)',2.6,4,82],['Zabpehely (flaked oats)',0.6,2,70],['Búzapehely (flaked wheat)',0.6,2,72]],
+  h:[['Citra',50,12,'hopstand',20],['Galaxy',40,15,'hopstand',20],['Citra',60,12,'dry',3],['Galaxy',50,15,'dry',3]],
+  y:['Verdant IPA (Lallemand)',78], hst:78, carb:2.3,
+  notes:'Hétköznapi NEIPA 4% körül — ugyanaz az élmény, fele annyi másnap. (Szándékosan a stílus alja alatt.)'},
+ {name:'Ír vörös ale', styleId:'',
+  f:[['Pale Malt, Maris Otter',4.0,5,82],['Crystal 60L',0.25,118,74],['CaraMunich II',0.2,120,74],['Roasted Barley',0.05,1200,68]],
+  h:[['East Kent Golding',25,5.5,'boil',30]],
+  y:['SafAle S-04',75], carb:2.2,
+  notes:'Vörösréz színű, karamelles, egyszerű öröm. A csipet pörkölt árpa adja a színt.'}
+];
+function openLibrary(){
+  const div=document.createElement('div');
+  div.className='modal-bg';
+  const rows = LIBRARY.map((o,i)=>{
+    const r=libRecipe(o), c=calc(r);
+    return `<div class="librow">
+      ${glassSvg(ebcHex(c.ebc),42)}
+      <div class="body">
+        <h4>${esc(o.name)}</h4>
+        <div class="ls">${esc(r.style)} · ${c.abv.toFixed(1)}% · ${Math.round(c.ibu)} IBU · ${fmt1(c.ebc)} EBC</div>
+      </div>
+      <button class="btn small" data-lib="${i}">${t('Hozzáadás')}</button>
+    </div>`;
+  }).join('');
+  div.innerHTML=`<div class="modal wide">
+    <div class="ph"><h2>${t('Könyvtár')}</h2><div class="spacer"></div><button class="btn small" id="l-close">${t('Bezár')}</button></div>
+    <div class="pb">
+      <div class="hint" style="margin:0 0 10px">${t('Kipróbált alapreceptek 21 literre, a te felszerelés-beállításaiddal számolva. Hozzáadás után szabadon átírhatod. Máshonnan (pl. sörös oldalakról) BeerXML fájllal tudsz receptet behozni a „Betöltés fájlból" gombbal.')}</div>
+      ${rows}
+    </div>
+  </div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click', e=>{ if(e.target===div) div.remove(); });
+  div.querySelector('#l-close').onclick = ()=>div.remove();
+  div.querySelectorAll('[data-lib]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const r=libRecipe(LIBRARY[+btn.dataset.lib]);
+      recipes.push(r); scheduleSave();
+      btn.textContent=t('Hozzáadva ✓'); btn.disabled=true;
+      toast('„'+r.name+'"'+t(' a receptjeid közt'));
+      if(view.name==='list') render();
+    };
+  });
+}
+
+/* ---------- BeerXML import ---------- */
+function importBeerXML(text){
+  const doc = new DOMParser().parseFromString(text, 'text/xml');
+  if(doc.querySelector('parsererror')) throw new Error('hibás XML');
+  const recs = [...doc.querySelectorAll('RECIPE')];
+  const gv = (el,tag)=>{ const e = el.getElementsByTagName(tag)[0]; return e ? e.textContent.trim() : ''; };
+  const gvd = (el,tag)=>{ /* csak közvetlen gyerek */ for(const ch of el.children){ if(ch.tagName===tag) return ch.textContent.trim(); } return ''; };
+  let n=0;
+  for(const R of recs){
+    const r = newRecipe();
+    r.name = gvd(R,'NAME') || t('Importált recept');
+    const stEl = R.getElementsByTagName('STYLE')[0];
+    const stName = stEl ? gv(stEl,'NAME') : '';
+    const hit = STYLES.find(s=>stName.toLowerCase().includes(s[1].toLowerCase()));
+    r.styleId = hit ? hit[0] : '';
+    r.style = hit ? hit[0]+' '+hit[1] : (stName || t('Importált'));
+    const bs=parseFloat(gvd(R,'BATCH_SIZE')); if(bs>0) r.equip.batchL=Math.round(bs*10)/10;
+    const bt=parseFloat(gvd(R,'BOIL_TIME')); if(bt>0) r.equip.boilMin=Math.round(bt);
+    const ef=parseFloat(gvd(R,'EFFICIENCY')); if(ef>0) r.equip.brewhouseEff=Math.round(ef);
+    r.fermentables = [...R.getElementsByTagName('FERMENTABLE')].map(F=>({
+      name: gv(F,'NAME'),
+      amount: Math.round((parseFloat(gv(F,'AMOUNT'))||0)*100)/100,
+      ebc: Math.round(((parseFloat(gv(F,'COLOR'))||2))*1.97*10)/10,
+      potential: Math.round(parseFloat(gv(F,'YIELD'))||80)
+    }));
+    r.hops = [...R.getElementsByTagName('HOP')].map(H=>{
+      const use=(gv(H,'USE')||'').toLowerCase();
+      let u='boil';
+      if(use.includes('dry')) u='dry';
+      else if(use.includes('aroma')||use.includes('whirl')) u='hopstand';
+      let time=Math.round(parseFloat(gv(H,'TIME'))||0);
+      if(u==='dry') time=Math.max(1, Math.round(time/1440));
+      return { name:gv(H,'NAME'), amount:Math.round((parseFloat(gv(H,'AMOUNT'))||0)*1000),
+               alpha:Math.round((parseFloat(gv(H,'ALPHA'))||10)*10)/10, use:u, time };
+    });
+    const ys=[...R.getElementsByTagName('YEAST')];
+    if(ys.length) r.yeasts = ys.map(Y=>({name:gv(Y,'NAME'), amount:1, attenuation:Math.round(parseFloat(gv(Y,'ATTENUATION'))||78)}));
+    const ms=[...R.getElementsByTagName('MASH_STEP')];
+    if(ms.length) r.mashSteps = ms.map(M=>({name:gv(M,'NAME')||'Lépés', temp:Math.round((parseFloat(gv(M,'STEP_TEMP'))||66)*10)/10, time:Math.round(parseFloat(gv(M,'STEP_TIME'))||60)}));
+    const mi=[...R.getElementsByTagName('MISC')];
+    if(mi.length) r.misc = mi.map(M=>({name:gv(M,'NAME'), amount:((parseFloat(gv(M,'AMOUNT'))||0)*1000).toFixed(0)+' g', when:'Forralás'}));
+    recipes.push(r); n++;
+  }
+  return n;
+}
+
 /* ---------- beállítások modal ---------- */
 function openSettings(){
   const S = settings;
   const div = document.createElement('div');
   div.className='modal-bg';
   div.innerHTML = `<div class="modal">
-    <div class="ph"><h2>Felszerelés — alapértelmezések</h2><div class="spacer"></div></div>
+    <div class="ph"><h2>${t('Felszerelés — alapértelmezések')}</h2><div class="spacer"></div></div>
     <div class="pb kv">
-      <label>Adag térfogata</label><div class="unit-in"><input id="s-batchL" type="number" step="0.5" inputmode="decimal" value="${S.batchL}"><span>L</span></div>
-      <label>Forralás ideje</label><div class="unit-in"><input id="s-boilMin" type="number" step="5" inputmode="numeric" value="${S.boilMin}"><span>perc</span></div>
-      <label>Főzőházi hatásfok</label><div class="unit-in"><input id="s-brewhouseEff" type="number" step="1" inputmode="numeric" value="${S.brewhouseEff}"><span>%</span></div>
-      <label>Cefre-hatásfok</label><div class="unit-in"><input id="s-mashEff" type="number" step="1" inputmode="numeric" value="${S.mashEff}"><span>%</span></div>
-      <label>Párolgás</label><div class="unit-in"><input id="s-boiloffLph" type="number" step="0.1" inputmode="decimal" value="${S.boiloffLph}"><span>L/óra</span></div>
-      <label>Üst/seprő veszteség</label><div class="unit-in"><input id="s-kettleLossL" type="number" step="0.1" inputmode="decimal" value="${S.kettleLossL}"><span>L</span></div>
-      <label>Maláta vízfelvétele</label><div class="unit-in"><input id="s-absorpLkg" type="number" step="0.01" inputmode="decimal" value="${S.absorpLkg}"><span>L/kg</span></div>
-      <label>Holttér</label><div class="unit-in"><input id="s-deadspaceL" type="number" step="0.05" inputmode="decimal" value="${S.deadspaceL}"><span>L</span></div>
-      <label>Cefre sűrűsége</label><div class="unit-in"><input id="s-mashThickness" type="number" step="0.1" inputmode="decimal" value="${S.mashThickness}"><span>L/kg</span></div>
-      <div class="hint" style="grid-column:1/-1">Brewtools B40-re hangolva. Ezek az értékek az <b>új</b> receptekbe másolódnak; a meglévők a saját beállításaikat őrzik.</div>
+      <label>${t('Adag térfogata')}</label><div class="unit-in"><input id="s-batchL" type="number" step="0.5" inputmode="decimal" value="${S.batchL}"><span>L</span></div>
+      <label>${t('Forralás ideje')}</label><div class="unit-in"><input id="s-boilMin" type="number" step="5" inputmode="numeric" value="${S.boilMin}"><span>perc</span></div>
+      <label>${t('Főzőházi hatásfok')}</label><div class="unit-in"><input id="s-brewhouseEff" type="number" step="1" inputmode="numeric" value="${S.brewhouseEff}"><span>%</span></div>
+      <label>${t('Cefre-hatásfok')}</label><div class="unit-in"><input id="s-mashEff" type="number" step="1" inputmode="numeric" value="${S.mashEff}"><span>%</span></div>
+      <label>${t('Párolgás')}</label><div class="unit-in"><input id="s-boiloffLph" type="number" step="0.1" inputmode="decimal" value="${S.boiloffLph}"><span>${t('L/óra')}</span></div>
+      <label>${t('Üst/seprő veszteség')}</label><div class="unit-in"><input id="s-kettleLossL" type="number" step="0.1" inputmode="decimal" value="${S.kettleLossL}"><span>L</span></div>
+      <label>${t('Maláta vízfelvétele')}</label><div class="unit-in"><input id="s-absorpLkg" type="number" step="0.01" inputmode="decimal" value="${S.absorpLkg}"><span>L/kg</span></div>
+      <label>${t('Holttér')}</label><div class="unit-in"><input id="s-deadspaceL" type="number" step="0.05" inputmode="decimal" value="${S.deadspaceL}"><span>L</span></div>
+      <label>${t('Cefre sűrűsége')}</label><div class="unit-in"><input id="s-mashThickness" type="number" step="0.1" inputmode="decimal" value="${S.mashThickness}"><span>L/kg</span></div>
+      <div class="hint" style="grid-column:1/-1">${t('Brewtools B40-re hangolva. Ezek az értékek az')} <b>${t('új')}</b> ${t('receptekbe másolódnak; a meglévők a saját beállításaikat őrzik.')}</div>
     </div>
     <div class="pf">
-      <button class="btn" id="s-cancel">Mégse</button>
-      <button class="btn primary" id="s-save">Mentés</button>
+      <button class="btn" id="s-cancel">${t('Mégse')}</button>
+      <button class="btn primary" id="s-save">${t('Mentés')}</button>
     </div>
   </div>`;
   document.body.appendChild(div);
@@ -840,13 +1711,13 @@ function openSettings(){
       const el = div.querySelector('#s-'+k);
       if(el && el.value!=='') settings[k] = +el.value;
     }
-    scheduleSave(); div.remove(); toast('Felszerelés mentve'); render();
+    scheduleSave(); div.remove(); toast(t('Felszerelés mentve')); render();
   };
 }
 
 /* ---------- export / import ---------- */
 function exportAll(){
-  const blob = new Blob([JSON.stringify({recipes, settings}, null, 2)], {type:'application/json'});
+  const blob = new Blob([JSON.stringify({recipes, batches, settings}, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'fozde-receptek.json';
@@ -856,8 +1727,14 @@ function exportAll(){
 function importAll(file){
   const fr = new FileReader();
   fr.onload = ()=>{
+    const txt = fr.result;
     try{
-      const data = JSON.parse(fr.result);
+      if(/^\s*</.test(txt) && txt.toUpperCase().includes('<RECIPE')){
+        const n = importBeerXML(txt);
+        scheduleSave(); render(); toast(n+t(' recept importálva (BeerXML)'));
+        return;
+      }
+      const data = JSON.parse(txt);
       const incoming = Array.isArray(data) ? data : (data.recipes||[]);
       let n=0;
       for(const r of incoming){
@@ -865,9 +1742,15 @@ function importAll(file){
         if(!r.id || recipes.some(x=>x.id===r.id)) r.id='r'+Date.now()+Math.random().toString(36).slice(2,6);
         recipes.push(r); n++;
       }
+      if(data.batches){
+        for(const b of data.batches){
+          if(!b || !b.id) continue;
+          if(!batches.some(x=>x.id===b.id)) batches.push(b);
+        }
+      }
       if(data.settings) settings = {...DEFAULT_SETTINGS, ...data.settings};
-      scheduleSave(); render(); toast(n+' recept betöltve');
-    }catch(e){ toast('Nem sikerült beolvasni a fájlt'); }
+      scheduleSave(); render(); toast(n+t(' recept betöltve'));
+    }catch(e){ toast(t('Nem sikerült beolvasni a fájlt')); }
   };
   fr.readAsText(file);
 }
@@ -880,9 +1763,11 @@ function toast(msg){
   toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
 }
 
-function render(){ view.name==='edit' ? renderEdit() : renderList(); }
+function render(){ view.name==='edit' ? renderEdit() : view.name==='batch' ? renderBatchEdit() : renderList(); }
 
 document.getElementById('btn-settings').onclick = openSettings;
+document.getElementById('btn-theme').onclick = ()=>{ ui.theme = ui.theme==='light'?'dark':'light'; saveUi(); applyUi(); };
+document.getElementById('btn-lang').onclick = ()=>{ ui.lang = ui.lang==='hu'?'en':'hu'; saveUi(); applyUi(); stopTimer(); render(); };
 document.getElementById('btn-export').onclick = exportAll;
 document.getElementById('btn-import').onclick = ()=>document.getElementById('import-file').click();
 document.getElementById('import-file').addEventListener('change', e=>{
@@ -891,8 +1776,9 @@ document.getElementById('import-file').addEventListener('change', e=>{
 });
 
 loadAll().then(()=>{
+  applyUi();
   render();
-  if(!storageOk) toast('Figyelem: a mentés nem érhető el, a receptek csak erre a munkamenetre maradnak meg');
+  if(!storageOk) toast(t('Figyelem: a mentés nem érhető el, a receptek csak erre a munkamenetre maradnak meg'));
 });
 
 if('serviceWorker' in navigator){

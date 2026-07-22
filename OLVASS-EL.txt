@@ -1,0 +1,51 @@
+FŐZDE — TELEPÍTÉSI ÚTMUTATÓ (kb. 5 perc, egyszer kell)
+======================================================
+
+Mi ez? A Főzde saját címen futó verziója. Ingyenes, a GitHub
+szerverein fut, offline is működik, és nem nyitja meg a Claude appot.
+
+1. LÉPÉS — GitHub fiók
+   Menj a github.com oldalra és regisztrálj (ingyenes), ha még nincs
+   fiókod. A felhasználónevedből lesz a cím, pl. "szabi84" esetén:
+   https://szabi84.github.io/fozde
+
+2. LÉPÉS — Új repó
+   Jobb felül a "+" jel → "New repository"
+   - Repository name: fozde
+   - Public legyen kiválasztva
+   - "Create repository" gomb
+
+3. LÉPÉS — Fájlok feltöltése
+   Az új, üres repóban kattints az "uploading an existing file" linkre.
+   Húzd be ebből a mappából MIND a fájlt (a zip tartalmát kicsomagolva):
+   - index.html
+   - manifest.webmanifest
+   - sw.js
+   - icon-192.png
+   - icon-512.png
+   - apple-touch-icon.png
+   Alul "Commit changes" gomb.
+
+4. LÉPÉS — Bekapcsolni az oldalt
+   A repóban: Settings (fogaskerék fül) → bal oldalt "Pages"
+   - "Source": Deploy from a branch
+   - "Branch": main, mappa: / (root) → Save
+   1-2 perc múlva a lap tetején megjelenik a cím:
+   https://FELHASZNÁLÓNEVED.github.io/fozde
+
+5. LÉPÉS — iPhone-ra
+   Nyisd meg ezt a címet SAFARIBAN a telefonon.
+   Megosztás ikon (négyzet, felfelé nyíl) → "Hozzáadás a
+   kezdőképernyőhöz". Kész — saját ikonnal, appként nyílik,
+   net nélkül is működik.
+
+RECEPTEK ÁTVITELE
+   A claude.ai-os verzióban nyomd meg fent a "Mentés fájlba" gombot
+   (kapsz egy fozde-receptek.json fájlt), majd az új helyen a
+   "Betöltés fájlból" gombbal olvasd be. Ugyanígy tudsz a telefon és
+   a gép között is szinkronizálni, ha kell.
+
+FRISSÍTÉS KÉSŐBB
+   Ha kérsz tőlem új funkciót, mindig egy új index.html-t adok:
+   a repóban rákattintasz az index.html-re → ceruza ikon helyett
+   egyszerűbb újra feltölteni ("Add file" → "Upload files", felülírja).
