@@ -33,6 +33,7 @@ body.light .timerbar{border-top-color:#B57A16}
 body.light .fchart svg text{fill:#6E6350}
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg)}
+html,body{overflow-x:hidden}
 body{background:radial-gradient(900px 420px at 18% -8%, rgba(229,166,60,.08), transparent 60%), radial-gradient(700px 320px at 85% -5%, rgba(201,124,74,.06), transparent 55%), var(--bg);color:var(--text);font-family:var(--body);font-size:14px;min-height:100vh}
 button{font-family:var(--body);cursor:pointer}
 input,select,textarea{font-family:var(--body);color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:7px 8px;font-size:13px;outline:none;min-width:0;width:100%}
@@ -41,7 +42,7 @@ input[type=number]{font-family:var(--mono);text-align:right}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
 input[type=number]{-moz-appearance:textfield;appearance:textfield}
 a{color:var(--gold)}
-.wrap{max-width:1180px;margin:0 auto;padding:0 20px 90px}
+.wrap{max-width:1180px;margin:0 auto;padding:env(safe-area-inset-top) calc(20px + env(safe-area-inset-right)) 90px calc(20px + env(safe-area-inset-left))}
 header.top{display:flex;align-items:center;gap:10px;padding:16px 0 12px;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
 .logo{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.5px;color:var(--gold);display:flex;align-items:center;gap:9px}
 .logo svg{width:24px;height:24px;flex:none}
@@ -129,6 +130,28 @@ textarea{min-height:90px;resize:vertical;line-height:1.5}
 .gout .glab{color:#B06A55}
 .grange{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:3px}
 .gout .grange{color:#C98A75}
+/* ---------- raktár (áttekinthető) ---------- */
+.invsec{margin-bottom:20px}
+.invsec-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.invsec-head svg{width:16px;height:16px;color:var(--gold);flex:none}
+.invsec-head h3{font-family:var(--display);font-size:14px;font-weight:700;flex:1}
+.invcount{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:10px;min-width:22px;text-align:center;padding:1px 7px}
+.invrow{display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.invname{flex:1;font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.invnum{display:flex;align-items:center;gap:6px;flex:none}
+.invnum input{width:78px;text-align:right}
+.invunit{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:26px}
+.invrm{flex:none;background:none;border:1px solid transparent;color:var(--dim);font-size:20px;line-height:1;padding:4px 9px;border-radius:6px}
+.invrm:hover{color:var(--red);background:var(--panel)}
+.invempty{font-size:12px;color:var(--dim);font-style:italic;padding:6px 2px 10px}
+.invadd{width:100%;margin-top:4px;background:var(--panel2);border:1px dashed var(--border2);color:var(--muted);font-weight:600;padding:10px;border-radius:8px}
+/* ---------- balra húzós törlés ---------- */
+.swipe-wrap{position:relative;overflow:hidden;border-radius:var(--radius);margin-bottom:0}
+.swipe-del{position:absolute;top:0;right:0;bottom:0;width:88px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:14px;border:none;border-radius:var(--radius)}
+.swipe-del svg{width:18px;height:18px}
+.swipe-wrap .card{position:relative;transition:transform .18s ease;touch-action:pan-y;will-change:transform;margin-bottom:0}
+.swipe-wrap.open .card{transform:translateX(-88px)}
+.grid.swipe-grid{gap:12px}
 /* ---------- címke-stílusú kártyák, kereső, erjedési grafikon ---------- */
 .card{padding:14px 16px 14px 14px;gap:12px}
 .band{width:10px;align-self:stretch;border-radius:5px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4), inset -3px 0 6px rgba(0,0,0,.3)}
@@ -203,7 +226,7 @@ textarea{min-height:90px;resize:vertical;line-height:1.5}
   .cols{grid-template-columns:1fr}
 }
 @media(max-width:640px){
-  .wrap{padding:0 12px 90px}
+  .wrap{padding:env(safe-area-inset-top) 12px 90px}
   input,select,textarea{font-size:16px;padding:10px}
   .btn{padding:11px 15px}
   .btn.small{padding:8px 12px;font-size:13px}
@@ -237,6 +260,12 @@ textarea{min-height:90px;resize:vertical;line-height:1.5}
   .statbar::after{min-width:0}
   .chk{font-size:14px}
   .timerbar b{font-size:19px}
+  header.top{padding-top:6px}
+  .list-head{flex-wrap:wrap;gap:8px}
+  .list-head .spacer{display:none}
+  .list-head #btn-new{margin-left:auto}
+  .tab{padding:7px 12px}
+  .ed-top{gap:8px}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none !important}}
 @media print{
@@ -357,7 +386,17 @@ const EN = {
 'Kalcium (Ca²⁺)':'Calcium (Ca²⁺)','Szulfát (SO₄²⁻)':'Sulfate (SO₄²⁻)','Klorid (Cl⁻)':'Chloride (Cl⁻)','Magnézium (Mg²⁺)':'Magnesium (Mg²⁺)','Nátrium (Na⁺)':'Sodium (Na⁺)','Klorid : szulfát arány':'Chloride : sulfate ratio',
 'A hozzáadott ionokat mutatja (a csapvized saját tartalma ehhez még hozzájön). NEIPA-hoz jellemzően a klorid, keserű IPA-hoz a szulfát dominál.':'Shows the added ions (your tap water adds its own on top). NEIPAs usually lean chloride, bitter IPAs lean sulfate.',
 'Kipróbált alapreceptek 21 literre, a te felszerelés-beállításaiddal számolva. Hozzáadás után szabadon átírhatod. Máshonnan (pl. sörös oldalakról) BeerXML fájllal tudsz receptet behozni a „Betöltés fájlból" gombbal.':'Tried-and-true base recipes for 21 L, calculated with your equipment settings. Edit freely after adding. Recipes from elsewhere (e.g. brewing sites) can be imported as BeerXML via "Load from file".',
-'Figyelem: a mentés nem érhető el, a receptek csak erre a munkamenetre maradnak meg':'Warning: storage is unavailable, recipes only persist for this session'
+'Figyelem: a mentés nem érhető el, a receptek csak erre a munkamenetre maradnak meg':'Warning: storage is unavailable, recipes only persist for this session',
+'Skálázás':'Scale','Recept skálázása':'Scale recipe','A malátákat, komlókat és élesztőt arányosan átszámolja az új térfogatra. A cefre-, komlóidők és hőmérsékletek nem változnak.':'Scales fermentables, hops and yeast proportionally to the new volume. Mash/hop times and temperatures stay the same.','Jelenlegi térfogat':'Current volume','Új térfogat':'New volume','Szorzó':'Factor','Új receptként':'As new recipe','Erre a receptre':'Apply to this recipe','Recept átskálázva':'Recipe rescaled','Skálázott másolat létrehozva':'Scaled copy created',
+'Raktár':'Inventory','Raktár és árak':'Inventory & prices','Egyéb':'Misc','Készlet':'Stock','Ár':'Price','/kg':'/kg','/100g':'/100g','/db':'/ea','Adj hozzá recepteket, és a hozzávalóik itt megjelennek — beírhatod a készletet és az árakat.':'Add recipes and their ingredients show up here — enter stock and prices.',
+'Válaszd ki a legördülőből, mi van készleten (ugyanaz a kínálat, mint a receptnél), vagy vegyél fel egyénit. A készlet mennyisége opcionális.':'Pick from the dropdown what you have in stock (same choices as in a recipe) or add a custom item. Stock amount is optional.',
+'Itt tartod nyilván, mi van otthon. Válassz a legördülőből, add meg a mennyiséget — legközelebb rögtön ezt látod.':'Keep track of what you have at home. Pick from the dropdown, enter the amount — you\'ll see it right away next time.','Nincs készleten':'Nothing in stock',
+'Válassz tételt a legördülő listából (ugyanaz a kínálat, mint a receptnél), vagy vegyél fel egyénit. A készlet és az ár opcionális — ha beírod az árakat, a recepteknél és a bevásárlólistán megjelenik a becsült költség. A pénznemet a ⚙ Felszerelés alatt állítod.':'Pick an item from the dropdown (same choices as in a recipe) or add a custom one. Stock and price are optional — enter prices and the estimated cost appears on recipes and the shopping list. Set the currency under ⚙ Equipment.',
+'Hozzáadás listából':'Add from list','+ Hozzáadás listából…':'+ Add from list…','— válassz —':'— choose —','+ egyéni tétel…':'+ custom item…','Tétel neve:':'Item name:','Eltávolítás':'Remove','Még nincs tétel ebben a kategóriában.':'No items in this category yet.','Ez a tétel már szerepel':'This item is already listed','A készlet és az ár opcionális. Ha beírod az árakat, a recepteknél és a bevásárlólistán megjelenik a becsült költség. A pénznemet a ⚙ Felszerelés alatt állítod.':'Stock and price are optional. Enter prices and the estimated cost appears on recipes and the shopping list. Set the currency under ⚙ Equipment.',
+'Költség':'Cost','Összes alapanyag':'Total ingredients','Egy literre':'Per liter','Egy 0,5 L-es üvegre':'Per 0.5 L bottle','Kb. ennyi 0,5 L-es üveg':'Approx. 0.5 L bottles','db':'ea','néhány hozzávalónak nincs ára a Raktárban — a végösszeg hiányos':'some ingredients have no price in Inventory — total is incomplete',
+'Pénznem':'Currency',
+'Címke':'Label','Sörcímke':'Beer label','Dátum a címkén':'Date on label','Letöltés képként':'Download as image','Címke letöltve':'Label downloaded',
+'Becsült költség':'Estimated cost'
 };
 function t(s){ if(ui.lang!=='en') return s; return EN[s]!==undefined ? EN[s] : s; }
 
@@ -400,7 +439,8 @@ function icon(n){
     jar:'M8 7.5h8V20a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 8 20V7.5ZM7 7.5h10M9.5 4h5v3.5h-5zM8 13h8',
     sliders:'M4 8h10M18 8h2M15 6v4M4 16h3M11 16h9M8 14v4',
     pencil:'M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1ZM14 6l4 4',
-    book:'M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21V5.5Z'
+    book:'M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21V5.5Z',
+    trash:'M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13M10 11v6M14 11v6'
   }[n];
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="${p}"/></svg>`;
 }
@@ -439,6 +479,7 @@ async function loadAll(){
     const r = await storGet('fozde-recipes'); if(r) recipes = JSON.parse(r);
     const b = await storGet('fozde-batches'); if(b) batches = JSON.parse(b);
     const u = await storGet('fozde-ui'); if(u) ui = {...ui, ...JSON.parse(u)};
+    const inv = await storGet('fozde-inventory'); if(inv) inventory = {...inventory, ...JSON.parse(inv)};
     const s = await storGet('fozde-settings'); if(s) settings = {...DEFAULT_SETTINGS, ...JSON.parse(s)};
   }catch(e){ storageOk=false; }
 }
@@ -452,6 +493,7 @@ async function saveAll(){
   const ok1 = await storSet('fozde-recipes', JSON.stringify(recipes));
   const ok2 = await storSet('fozde-settings', JSON.stringify(settings));
   const ok3 = await storSet('fozde-batches', JSON.stringify(batches));
+  await storSet('fozde-inventory', JSON.stringify(inventory));
   setSaveState(ok1 && ok2 && ok3 ? 'Mentve' : 'Mentés sikertelen');
 }
 function setSaveState(txt){ const el=document.getElementById('save-state'); if(el) el.textContent=t(txt); }
@@ -542,7 +584,8 @@ const app = document.getElementById('app');
 let view = {name:'list'};
 let listTab = 'recipes';
 let searchQ = '';
-let ui = {theme:'dark', lang:'hu'};
+let ui = {theme:'dark', lang:'hu', currency:'RON'};
+let inventory = {fermentables:{}, hops:{}, yeasts:{}, misc:{}};
 async function saveUi(){ try{ await storSet('fozde-ui', JSON.stringify(ui)); }catch(e){} }
 function applyUi(){
   document.body.classList.toggle('light', ui.theme==='light');
@@ -575,6 +618,7 @@ function listChrome(count){
       </div>
       <span class="count">${count} ${t('db')}</span>
       <div class="spacer"></div>
+      <button class="btn small" id="btn-inv">${t('Raktár')}</button>
       <button class="btn small" id="btn-lib">${t('Könyvtár')}</button>
       <button class="btn small" id="btn-calc">${t('Kalkulátorok')}</button>
       ${listTab==='recipes'?'<button class="btn primary" id="btn-new">'+t('+ Új recept')+'</button>':''}
@@ -584,36 +628,89 @@ function wireChrome(){
   app.querySelectorAll('[data-tab]').forEach(b=>{ b.onclick=()=>{ listTab=b.dataset.tab; render(); }; });
   const lib=document.getElementById('btn-lib'); if(lib) lib.onclick=openLibrary;
   const cb=document.getElementById('btn-calc'); if(cb) cb.onclick=openCalc;
+  const ib=document.getElementById('btn-inv'); if(ib) ib.onclick=openInventory;
   const nb=document.getElementById('btn-new');
   if(nb) nb.onclick=()=>{ const r=newRecipe(); recipes.push(r); scheduleSave(); view={name:'edit',id:r.id}; render(); };
 }
 function recipeCardHtml(r){
   const c = calc(r);
-  return `<div class="card" data-open="${r.id}">
+  return `<div class="swipe-wrap" data-swipe="${r.id}"><button class="swipe-del" data-swipedel="${r.id}" data-swipekind="recipe">${icon('trash')}${t('Törlés')}</button><div class="card" data-open="${r.id}">
     <div class="band" style="background:${ebcHex(c.ebc)}"></div>
     <div class="body">
       <div class="card-top">${r.styleId?`<span class="stybadge">${esc(r.styleId)}</span>`:''}<h3>${esc(r.name)}</h3></div>
       <div class="style">${esc(r.style||'—')}</div>
       <div class="cstats">${c.abv.toFixed(1)}% · ${fmtSg(c.og)} → ${fmtSg(c.fg)} · ${Math.round(c.ibu)} IBU · ${fmt1(c.ebc)} EBC · ${r.equip.batchL} L</div>
     </div>
-  </div>`;
+  </div></div>`;
 }
 function filteredRecipes(){
   const q = searchQ.trim().toLowerCase();
   return recipes.slice().sort((a,b)=>b.created-a.created)
     .filter(r=>!q || (r.name||'').toLowerCase().includes(q) || (r.style||'').toLowerCase().includes(q));
 }
+function wireSwipe(scope){
+  let openEl=null;
+  const closeAll=(except)=>{ scope.querySelectorAll('.swipe-wrap.open').forEach(w=>{ if(w!==except) w.classList.remove('open'); }); };
+  scope.querySelectorAll('.swipe-wrap').forEach(wrap=>{
+    let x0=null,y0=null,dx=0,dragging=false;
+    const card=wrap.querySelector('.card');
+    card.addEventListener('touchstart',e=>{ x0=e.touches[0].clientX; y0=e.touches[0].clientY; dx=0; dragging=false; },{passive:true});
+    card.addEventListener('touchmove',e=>{
+      if(x0===null) return;
+      dx=e.touches[0].clientX-x0; const dy=e.touches[0].clientY-y0;
+      if(!dragging && Math.abs(dx)>8 && Math.abs(dx)>Math.abs(dy)) dragging=true;
+      if(dragging){
+        const base=wrap.classList.contains('open')?-88:0;
+        let tx=Math.max(-88, Math.min(0, base+dx));
+        card.style.transform='translateX('+tx+'px)';
+      }
+    },{passive:true});
+    card.addEventListener('touchend',()=>{
+      if(x0===null) return;
+      card.style.transform='';
+      if(dragging){
+        const wasOpen=wrap.classList.contains('open');
+        if(!wasOpen && dx<-40){ closeAll(wrap); wrap.classList.add('open'); }
+        else if(wasOpen && dx>40){ wrap.classList.remove('open'); }
+        else if(!wasOpen){ wrap.classList.remove('open'); }
+      }
+      x0=null; dragging=false;
+    });
+    // ha nyitva van és a kártyára koppint, csak becsukja (nem nyit meg receptet)
+    card.addEventListener('click',e=>{
+      if(wrap.classList.contains('open')){ e.stopPropagation(); e.preventDefault(); wrap.classList.remove('open'); }
+    },true);
+  });
+  scope.querySelectorAll('[data-swipedel]').forEach(btn=>{
+    btn.onclick=(e)=>{
+      e.stopPropagation();
+      const id=btn.dataset.swipedel, kind=btn.dataset.swipekind;
+      if(kind==='recipe'){
+        const r=recipes.find(x=>x.id===id); if(!r) return;
+        confirmModal(t('Biztos törlöd a receptet:')+' '+r.name+'?', ()=>{
+          recipes=recipes.filter(x=>x.id!==id); scheduleSave(); render(); toast(t('Recept törölve'));
+        });
+      } else {
+        const b=batches.find(x=>x.id===id); if(!b) return;
+        confirmModal(t('Biztos törlöd ezt a főzetet?')+' ('+b.name+', '+b.date+')', ()=>{
+          batches=batches.filter(x=>x.id!==id); scheduleSave(); render(); toast(t('Főzet törölve'));
+        });
+      }
+    };
+  });
+}
 function bindRecipeCards(){
   app.querySelectorAll('[data-open]').forEach(el=>{
-    el.onclick = ()=>{ view={name:'edit', id:el.dataset.open}; render(); };
+    el.onclick = ()=>{ const wrap=el.closest('.swipe-wrap'); if(wrap&&wrap.classList.contains('open')) return; view={name:'edit', id:el.dataset.open}; render(); };
   });
+  wireSwipe(app);
 }
 function renderList(){
   if(listTab==='batches') return renderBatchList();
   const cards = filteredRecipes().map(recipeCardHtml).join('');
   app.innerHTML = listChrome(recipes.length) + `
     ${recipes.length>2?`<div class="filter-row"><input id="q" type="search" placeholder="${t('Keresés név vagy stílus szerint…')}" value="${esc(searchQ)}"></div>`:''}
-    ${recipes.length ? `<div class="grid" id="rgrid">${cards||'<div class="empty" style="grid-column:1/-1">'+t('Nincs találat.')+'</div>'}</div>` :
+    ${recipes.length ? `<div class="grid swipe-grid" id="rgrid">${cards||'<div class="empty" style="grid-column:1/-1">'+t('Nincs találat.')+'</div>'}</div>` :
       `<div class="empty"><strong>${t('Még nincs recepted.')}</strong><p>${t('Kattints az „Új recept" gombra, vagy nézz szét a Könyvtárban.')}</p></div>`}
   `;
   wireChrome();
@@ -655,23 +752,24 @@ function renderBatchList(){
       const bc = batchCalc(b);
       const abv = bc.abv!=null ? bc.abv.toFixed(1)+'%' : bc.plan.abv.toFixed(1)+'% '+t('(terv)');
       const day = (b.status==='erjed' && b.date) ? Math.max(1, Math.floor((Date.now()-new Date(b.date).getTime())/86400000)+1) : null;
-      return `<div class="card" data-openb="${b.id}">
+      return `<div class="swipe-wrap" data-swipe="${b.id}"><button class="swipe-del" data-swipedel="${b.id}" data-swipekind="batch">${icon('trash')}${t('Törlés')}</button><div class="card" data-openb="${b.id}">
         <div class="band" style="background:${ebcHex(bc.plan.ebc)}"></div>
         <div class="body">
           <div class="card-top"><span class="status ${b.status}">${t(stLab[b.status]||b.status)}</span><h3>${esc(b.name)}</h3></div>
           <div class="style">${b.date||''} ${b.rating?`<span class="stars ro">${'★'.repeat(b.rating)}</span>`:''} ${day?`<span class="days">· ${day}${t('. napja erjed')}</span>`:''}</div>
           <div class="cstats">${abv}${b.measured.og?` · OG ${(+b.measured.og).toFixed(3)}`:''}${bc.eff!=null?` · ${t('hatásfok')} ${bc.eff.toFixed(0)}%`:''}</div>
         </div>
-      </div>`;
+      </div></div>`;
     }).join('');
   app.innerHTML = listChrome(batches.length) + (batches.length?batchStatsHtml():'') + `
-    ${batches.length ? `<div class="grid">${cards}</div>` :
+    ${batches.length ? `<div class="grid swipe-grid">${cards}</div>` :
       `<div class="empty"><strong>${t('Még nincs főzeted.')}</strong><p>${t('Nyiss meg egy receptet és nyomd meg a „Főzet indítása" gombot — onnantól ott a főzésnapi lista, és felírhatod a mért értékeket.')}</p></div>`}
   `;
   wireChrome();
   app.querySelectorAll('[data-openb]').forEach(el=>{
-    el.onclick = ()=>{ view={name:'batch', id:el.dataset.openb}; render(); };
+    el.onclick = ()=>{ const wrap=el.closest('.swipe-wrap'); if(wrap&&wrap.classList.contains('open')) return; view={name:'batch', id:el.dataset.openb}; render(); };
   });
+  wireSwipe(app);
 }
 
 /* ---------- mező-építők ---------- */
@@ -846,8 +944,10 @@ function renderEdit(){
     <input class="name-input" data-f="name" value="${esc(r.name)}">
     <span class="save-state" id="save-state"></span>
     <button class="btn small primary" id="btn-brew">${t('Főzet indítása')}</button>
+    <button class="btn small" id="btn-scale">${t('Skálázás')}</button>
     <button class="btn small" id="btn-shop">${t('Bevásárlólista')}</button>
     <button class="btn small" id="btn-print">${t('Nyomtatás')}</button>
+    <button class="btn small" id="btn-label">${t('Címke')}</button>
     <button class="btn small" id="btn-dup">${t('Duplikálás')}</button>
     <button class="btn small danger" id="btn-del">${t('Törlés')}</button>
   </div>
@@ -952,10 +1052,10 @@ function wireEdit(r){
     toast(t('Recept duplikálva'));
   };
   document.getElementById('btn-del').onclick = ()=>{
-    if(confirm(t('Biztos törlöd a receptet:')+' '+r.name+'?')){
+    confirmModal(t('Biztos törlöd a receptet:')+' '+r.name+'?', ()=>{
       recipes = recipes.filter(x=>x.id!==r.id); scheduleSave(); view={name:'list'}; render();
       toast(t('Recept törölve'));
-    }
+    });
   };
   document.getElementById('btn-brew').onclick = ()=>{
     const b = newBatchFrom(r);
@@ -963,8 +1063,10 @@ function wireEdit(r){
     view={name:'batch', id:b.id}; render();
     toast(t('Főzet létrehozva — a recept pillanatképe elmentve'));
   };
+  document.getElementById('btn-scale').onclick = ()=>openScale(r);
   document.getElementById('btn-shop').onclick = ()=>openShoplist(r);
   document.getElementById('btn-print').onclick = ()=>window.print();
+  document.getElementById('btn-label').onclick = ()=>openLabel(r);
   const styleSel = document.getElementById('style-select');
   if(styleSel){
     styleSel.addEventListener('change', ()=>{
@@ -1148,6 +1250,119 @@ function fermChartHtml(b){
     <text x="${W-10}" y="${H-4}" text-anchor="end" font-size="10" fill="#6E6350" font-family="monospace">${days} ${t('nap')}</text>
   </svg></div>`;
 }
+function openLabel(r){
+  const c=calc(r); const hex=ebcHex(c.ebc);
+  const today=new Date().toISOString().slice(0,10);
+  const hops=[...new Set(r.hops.filter(h=>h.name).map(h=>h.name))].slice(0,4).join(' · ');
+  const div=document.createElement('div'); div.className='modal-bg';
+  div.innerHTML=`<div class="modal"><div class="ph"><h2>${t('Sörcímke')}</h2><div class="spacer"></div><button class="btn small" id="lb-close">${t('Bezár')}</button></div>
+   <div class="pb">
+     <div id="label-card" style="width:300px;max-width:100%;margin:0 auto;background:#17130E;border:1px solid #4A3F2C;border-radius:14px;overflow:hidden;font-family:var(--body)">
+       <div style="height:64px;background:${hex};position:relative">
+         <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 60%)"></div>
+         <div style="position:absolute;bottom:6px;left:14px;font-family:var(--display);font-weight:800;font-size:13px;color:#17130E;letter-spacing:.5px">${r.styleId?esc(r.styleId)+' · ':''}${esc(r.style||'')}</div>
+       </div>
+       <div style="padding:16px 16px 18px">
+         <div style="font-family:var(--display);font-weight:800;font-size:24px;color:#EFE7D6;line-height:1.1">${esc(r.name)}</div>
+         <div style="font-family:var(--mono);color:#A2957B;font-size:12px;margin-top:6px">${esc(r.author||'')}</div>
+         <div style="display:flex;gap:10px;margin-top:14px">
+           <div style="flex:1;text-align:center;background:#211B13;border:1px solid #3A3122;border-radius:8px;padding:8px 4px"><div style="font-family:var(--mono);font-weight:700;color:#E5A63C;font-size:18px">${c.abv.toFixed(1)}%</div><div style="font-size:9px;letter-spacing:.6px;color:#6E6350;text-transform:uppercase;margin-top:2px">ABV</div></div>
+           <div style="flex:1;text-align:center;background:#211B13;border:1px solid #3A3122;border-radius:8px;padding:8px 4px"><div style="font-family:var(--mono);font-weight:700;color:#EFE7D6;font-size:18px">${Math.round(c.ibu)}</div><div style="font-size:9px;letter-spacing:.6px;color:#6E6350;text-transform:uppercase;margin-top:2px">IBU</div></div>
+           <div style="flex:1;text-align:center;background:#211B13;border:1px solid #3A3122;border-radius:8px;padding:8px 4px"><div style="font-family:var(--mono);font-weight:700;color:#EFE7D6;font-size:18px">${fmt1(c.ebc)}</div><div style="font-size:9px;letter-spacing:.6px;color:#6E6350;text-transform:uppercase;margin-top:2px">EBC</div></div>
+         </div>
+         ${hops?`<div style="font-size:11px;color:#A2957B;margin-top:12px">${t('Komló')}: ${esc(hops)}</div>`:''}
+         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:10px;border-top:1px solid #3A3122">
+           <span style="font-family:var(--display);font-weight:700;color:#E5A63C;font-size:13px">Főzde</span>
+           <span id="lb-date" style="font-family:var(--mono);font-size:11px;color:#6E6350">${today}</span>
+         </div>
+       </div>
+     </div>
+     <div class="kv" style="max-width:300px;margin:14px auto 0">
+       <label>${t('Dátum a címkén')}</label><input type="date" id="lb-datein" value="${today}">
+     </div>
+   </div>
+   <div class="pf"><button class="btn primary" id="lb-png">${t('Letöltés képként')}</button></div></div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click',e=>{ if(e.target===div) div.remove(); });
+  div.querySelector('#lb-close').onclick=()=>div.remove();
+  div.querySelector('#lb-datein').addEventListener('input',e=>{ div.querySelector('#lb-date').textContent=e.target.value; });
+  div.querySelector('#lb-png').onclick=()=>labelToPng(r,c,hex,hops,div.querySelector('#lb-date').textContent);
+}
+function labelToPng(r,c,hex,hops,date){
+  const S=2, W=300, H=hops?300:284;
+  const cv=document.createElement('canvas'); cv.width=W*S; cv.height=H*S;
+  const x=cv.getContext('2d'); x.scale(S,S);
+  const rr=(a,b,w,h,rad)=>{ x.beginPath(); x.moveTo(a+rad,b); x.arcTo(a+w,b,a+w,b+h,rad); x.arcTo(a+w,b+h,a,b+h,rad); x.arcTo(a,b+h,a,b,rad); x.arcTo(a,b,a+w,b,rad); x.closePath(); };
+  x.fillStyle='#17130E'; rr(0,0,W,H,14); x.fill();
+  x.fillStyle=hex; x.fillRect(0,0,W,64);
+  const g=x.createLinearGradient(0,0,0,64); g.addColorStop(0,'rgba(255,255,255,.25)'); g.addColorStop(.6,'rgba(255,255,255,0)'); x.fillStyle=g; x.fillRect(0,0,W,64);
+  x.fillStyle='#17130E'; x.font='700 13px Inter, sans-serif';
+  x.fillText((r.styleId?r.styleId+' · ':'')+(r.style||''), 14, 52);
+  x.fillStyle='#EFE7D6'; x.font='800 24px Inter, sans-serif';
+  x.fillText(r.name.length>22?r.name.slice(0,21)+'…':r.name, 16, 96);
+  x.fillStyle='#A2957B'; x.font='12px monospace'; x.fillText(r.author||'', 16, 114);
+  const stats=[[c.abv.toFixed(1)+'%','ABV'],[String(Math.round(c.ibu)),'IBU'],[fmt1(c.ebc),'EBC']];
+  const bw=(W-32-20)/3;
+  stats.forEach((s,i)=>{ const bx=16+i*(bw+10);
+    x.fillStyle='#211B13'; rr(bx,128,bw,44,8); x.fill();
+    x.fillStyle=i===0?'#E5A63C':'#EFE7D6'; x.font='700 18px monospace'; x.textAlign='center';
+    x.fillText(s[0], bx+bw/2, 152);
+    x.fillStyle='#6E6350'; x.font='9px Inter, sans-serif'; x.fillText(s[1], bx+bw/2, 166);
+    x.textAlign='left';
+  });
+  let y=196;
+  if(hops){ x.fillStyle='#A2957B'; x.font='11px Inter, sans-serif'; x.fillText((ui.lang==='en'?'Hops: ':'Komló: ')+hops, 16, y); y+=18; }
+  x.strokeStyle='#3A3122'; x.beginPath(); x.moveTo(16,y+6); x.lineTo(W-16,y+6); x.stroke();
+  x.fillStyle='#E5A63C'; x.font='700 13px Inter, sans-serif'; x.fillText('Főzde', 16, y+26);
+  x.fillStyle='#6E6350'; x.font='11px monospace'; x.textAlign='right'; x.fillText(date, W-16, y+26); x.textAlign='left';
+  cv.toBlob(b=>{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(b);
+    a.download=(r.name||'cimke').replace(/[^a-z0-9]+/gi,'_')+'.png'; a.click();
+    URL.revokeObjectURL(a.href); toast(t('Címke letöltve'));
+  });
+}
+function openScale(r){
+  const cur=r.equip.batchL;
+  const div=document.createElement('div'); div.className='modal-bg';
+  div.innerHTML=`<div class="modal"><div class="ph"><h2>${t('Recept skálázása')}</h2><div class="spacer"></div><button class="btn small" id="sc-close">${t('Bezár')}</button></div>
+   <div class="pb">
+     <div class="hint" style="margin:0 0 12px">${t('A malátákat, komlókat és élesztőt arányosan átszámolja az új térfogatra. A cefre-, komlóidők és hőmérsékletek nem változnak.')}</div>
+     <div class="kv">
+       <label>${t('Jelenlegi térfogat')}</label><div class="unit-in"><input type="number" value="${cur}" disabled><span>L</span></div>
+       <label>${t('Új térfogat')}</label><div class="unit-in"><input type="number" step="0.5" inputmode="decimal" id="sc-new" value="${cur}"><span>L</span></div>
+       <label>${t('Szorzó')}</label><span class="cres" id="sc-factor">1.00×</span>
+     </div>
+   </div>
+   <div class="pf">
+     <button class="btn" id="sc-copy">${t('Új receptként')}</button>
+     <button class="btn primary" id="sc-apply">${t('Erre a receptre')}</button>
+   </div></div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click',e=>{ if(e.target===div) div.remove(); });
+  const nv=div.querySelector('#sc-new'), fc=div.querySelector('#sc-factor');
+  const factor=()=>{ const v=parseFloat(nv.value)||cur; return v/cur; };
+  nv.addEventListener('input',()=>{ fc.textContent=factor().toFixed(2)+'×'; });
+  function scaled(target){
+    const f=factor();
+    target.equip.batchL=Math.round((parseFloat(nv.value)||cur)*10)/10;
+    target.fermentables=target.fermentables.map(x=>({...x, amount: x.amount!=='' ? Math.round((+x.amount*f)*100)/100 : x.amount}));
+    target.hops=target.hops.map(x=>({...x, amount: x.amount!=='' ? Math.round(+x.amount*f) : x.amount}));
+    target.misc=target.misc.map(x=>({...x}));
+  }
+  div.querySelector('#sc-close').onclick=()=>div.remove();
+  div.querySelector('#sc-apply').onclick=()=>{
+    scaled(r); scheduleSave(); div.remove(); renderEdit(); toast(t('Recept átskálázva'));
+  };
+  div.querySelector('#sc-copy').onclick=()=>{
+    const copy=JSON.parse(JSON.stringify(r));
+    copy.id='r'+Date.now()+Math.random().toString(36).slice(2,6); copy.created=Date.now();
+    const v=Math.round((parseFloat(nv.value)||cur)*10)/10;
+    copy.name=r.name+' ('+v+' L)';
+    scaled(copy);
+    recipes.push(copy); scheduleSave(); div.remove();
+    view={name:'edit',id:copy.id}; render(); toast(t('Skálázott másolat létrehozva'));
+  };
+}
 function openShoplist(r){
   const agg=(arr,key,amt)=>{ const m={}; for(const x of arr){ const n=(x[key]||'').trim(); if(!n) continue; m[n]=(m[n]||0)+(+x[amt]||0); } return Object.entries(m); };
   const f=agg(r.fermentables,'name','amount'), h=agg(r.hops,'name','amount');
@@ -1157,9 +1372,10 @@ function openShoplist(r){
     ...r.yeasts.filter(y=>y.name).map(y=>`${y.amount||1}${t(' csomag ')}— ${y.name}`),
     ...r.misc.filter(m=>m.name).map(m=>`${m.amount||''} — ${m.name}`)
   ];
+
   const div=document.createElement('div'); div.className='modal-bg';
   div.innerHTML=`<div class="modal"><div class="ph"><h2>${t('Bevásárlólista')} — ${esc(r.name)}</h2><div class="spacer"></div><button class="btn small" id="sh-close">${t('Bezár')}</button></div>
-   <div class="pb check-list">${items.map(t=>`<label class="chk"><input type="checkbox"><span>${esc(t)}</span></label>`).join('')||'<div class="hint">'+t('Nincs hozzávaló a receptben.')+'</div>'}</div>
+   <div class="pb check-list">${items.map(it=>`<label class="chk"><input type="checkbox"><span>${esc(it)}</span></label>`).join('')||'<div class="hint">'+t('Nincs hozzávaló a receptben.')+'</div>'}</div>
    <div class="pf"><button class="btn" id="sh-copy">${t('Másolás vágólapra')}</button></div></div>`;
   document.body.appendChild(div);
   div.addEventListener('click', e=>{ if(e.target===div) div.remove(); });
@@ -1230,10 +1446,10 @@ function renderBatchEdit(){
   const rb=document.getElementById('bb-recipe');
   if(rb) rb.onclick = ()=>{ view={name:'edit', id:b.recipeId}; render(); };
   document.getElementById('bb-del').onclick = ()=>{
-    if(confirm(t('Biztos törlöd ezt a főzetet?')+' ('+b.name+', '+b.date+')')){
+    confirmModal(t('Biztos törlöd ezt a főzetet?')+' ('+b.name+', '+b.date+')', ()=>{
       batches = batches.filter(x=>x.id!==b.id); scheduleSave();
       view={name:'list'}; listTab='batches'; render(); toast(t('Főzet törölve'));
-    }
+    });
   };
   document.getElementById('bb-date').addEventListener('change', e=>{ b.date=e.target.value; scheduleSave(); });
   document.getElementById('bb-status').addEventListener('change', e=>{ b.status=e.target.value; scheduleSave(); });
@@ -1633,6 +1849,125 @@ function openLibrary(){
   });
 }
 
+/* ---------- raktár + költség ---------- */
+function collectIngredients(){
+  const cats={fermentables:new Set(),hops:new Set(),yeasts:new Set(),misc:new Set()};
+  for(const r of recipes){
+    r.fermentables.forEach(f=>f.name&&cats.fermentables.add(f.name));
+    r.hops.forEach(h=>h.name&&cats.hops.add(h.name));
+    r.yeasts.forEach(y=>y.name&&cats.yeasts.add(y.name));
+    r.misc.forEach(m=>m.name&&cats.misc.add(m.name));
+  }
+  Object.keys(cats).forEach(k=>Object.keys(inventory[k]||{}).forEach(n=>cats[k].add(n)));
+  return cats;
+}
+function invUnit(cat){ return cat==='fermentables'?'kg':cat==='hops'?'g':'db'; }
+function priceUnit(cat){ return cat==='fermentables'?t('/kg'):cat==='hops'?t('/100g'):t('/db'); }
+/* teljes választéklisták a raktár legördülőihez (a recepteknél használt adatlisták alapján) */
+function invChoices(cat){
+  if(cat==='fermentables') return MALTS.map(m=>m[0]);
+  if(cat==='hops') return HOPS.map(h=>h[0]);
+  if(cat==='yeasts') return YEASTS.map(y=>y[0]);
+  return []; // egyéb: csak kézi
+}
+function openInventory(){
+  const catLabels={fermentables:t('Maláták'),hops:t('Komlók'),yeasts:t('Élesztő'),misc:t('Egyéb')};
+  const catIcon={fermentables:'grain',hops:'hop',yeasts:'flask',misc:'jar'};
+  const div=document.createElement('div'); div.className='modal-bg';
+  function itemsOf(cat){ return Object.keys(inventory[cat]||{}).sort((a,b)=>a.localeCompare(b)); }
+  function stockStr(cat,n){ const s=(inventory[cat]||{})[n]; const v=s&&s.stock; return (v!=null&&v!=='')?fmt1(+v)+' '+invUnit(cat):'—'; }
+  function rowHtml(cat,n){
+    const it=(inventory[cat]||{})[n]||{};
+    return `<div class="invrow" data-invrow="${cat}||${esc(n)}">
+      <div class="invname" title="${esc(n)}">${esc(n)}</div>
+      <div class="invnum"><input type="number" step="0.1" inputmode="decimal" data-inv="${cat}||${esc(n)}||stock" value="${it.stock!=null?it.stock:''}" placeholder="0"><span class="invunit">${invUnit(cat)}</span></div>
+      <button class="invrm" data-invrm="${cat}||${esc(n)}" title="${t('Eltávolítás')}">×</button>
+    </div>`;
+  }
+  function sectionHtml(cat){
+    const items=itemsOf(cat);
+    const rows=items.map(n=>rowHtml(cat,n)).join('');
+    const inStock=new Set(items);
+    const choices=invChoices(cat).filter(n=>!inStock.has(n));
+    const dropdown = `<select class="invadd" data-invadd="${cat}">
+        <option value="">${t('+ Hozzáadás listából…')}</option>
+        ${choices.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')}
+        <option value="__custom__">${t('+ egyéni tétel…')}</option>
+      </select>`;
+    return `<div class="invsec" data-invsec="${cat}">
+      <div class="invsec-head">${icon(catIcon[cat])}<h3>${catLabels[cat]}</h3><span class="invcount" data-invcount="${cat}">${items.length}</span></div>
+      <div class="rows" data-invrows="${cat}">${rows||`<div class="invempty">${t('Nincs készleten')}</div>`}</div>
+      ${dropdown}</div>`;
+  }
+  const body = ['fermentables','hops','yeasts','misc'].map(sectionHtml).join('');
+  div.innerHTML=`<div class="modal wide"><div class="ph"><h2>${t('Raktár')}</h2><div class="spacer"></div><button class="btn small" id="inv-close">${t('Bezár')}</button></div>
+    <div class="pb">
+      <div class="hint" style="margin:0 0 14px">${t('Itt tartod nyilván, mi van otthon. Válassz a legördülőből, add meg a mennyiséget — legközelebb rögtön ezt látod.')}</div>
+      ${body}
+    </div></div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click',e=>{ if(e.target===div) div.remove(); });
+  div.querySelector('#inv-close').onclick=()=>div.remove();
+
+  function ensure(cat,name){ if(!inventory[cat]) inventory[cat]={}; if(!inventory[cat][name]) inventory[cat][name]={}; }
+  function updateCount(cat){ const c=div.querySelector(`[data-invcount="${cat}"]`); if(c) c.textContent=itemsOf(cat).length; }
+  function bindInputs(scope){
+    scope.querySelectorAll('[data-inv]').forEach(inp=>{
+      if(inp._b) return; inp._b=1;
+      inp.addEventListener('input',()=>{
+        const [cat,name,field]=inp.dataset.inv.split('||');
+        ensure(cat,name);
+        inventory[cat][name][field] = inp.value===''?null:+inp.value;
+        scheduleSave();
+      });
+    });
+    scope.querySelectorAll('[data-invrm]').forEach(btn=>{
+      if(btn._b) return; btn._b=1;
+      btn.onclick=()=>{
+        const [cat,name]=btn.dataset.invrm.split('||');
+        if(inventory[cat]) delete inventory[cat][name];
+        scheduleSave();
+        const rowsBox=div.querySelector(`[data-invrows="${cat}"]`);
+        btn.closest('.invrow').remove();
+        if(!itemsOf(cat).length) rowsBox.innerHTML=`<div class="invempty">${t('Nincs készleten')}</div>`;
+        updateCount(cat);
+        const sel=div.querySelector(`[data-invadd="${cat}"]`);
+        if(sel && invChoices(cat).includes(name) && !sel.querySelector(`option[value="${name.replace(/"/g,'&quot;')}"]`)){
+          const opt=document.createElement('option'); opt.value=name; opt.textContent=name;
+          sel.insertBefore(opt, sel.querySelector('option[value="__custom__"]'));
+        }
+      };
+    });
+  }
+  bindInputs(div);
+  div.querySelectorAll('[data-invadd]').forEach(sel=>{
+    sel.addEventListener('change',()=>{
+      const cat=sel.dataset.invadd;
+      let name=sel.value;
+      if(!name) return;
+      if(name==='__custom__'){
+        name=(prompt(t('Tétel neve:'))||'').trim();
+        sel.value='';
+        if(!name) return;
+      } else {
+        const opt=sel.querySelector(`option[value="${name.replace(/"/g,'&quot;')}"]`);
+        if(opt) opt.remove();
+        sel.value='';
+      }
+      const rowsBox=div.querySelector(`[data-invrows="${cat}"]`);
+      if(rowsBox.querySelector(`[data-invrow="${cat}||${name.replace(/"/g,'&quot;')}"]`)) { toast(t('Ez a tétel már szerepel')); return; }
+      ensure(cat,name);
+      scheduleSave();
+      const emptyEl=rowsBox.querySelector('.invempty'); if(emptyEl) emptyEl.remove();
+      rowsBox.insertAdjacentHTML('beforeend', rowHtml(cat,name));
+      bindInputs(rowsBox);
+      updateCount(cat);
+      const last=rowsBox.lastElementChild.querySelector('input');
+      if(last) last.focus();
+    });
+  });
+}
+
 /* ---------- BeerXML import ---------- */
 function importBeerXML(text){
   const doc = new DOMParser().parseFromString(text, 'text/xml');
@@ -1755,6 +2090,15 @@ function importAll(file){
   fr.readAsText(file);
 }
 
+function confirmModal(msg, onYes){
+  const div=document.createElement('div'); div.className='modal-bg';
+  div.innerHTML=`<div class="modal" style="max-width:360px"><div class="pb" style="padding:20px 18px 6px;font-size:14px;line-height:1.5">${esc(msg)}</div>
+    <div class="pf"><button class="btn" id="cf-no">${t('Mégse')}</button><button class="btn primary danger" id="cf-yes" style="background:var(--red);border-color:var(--red);color:#fff">${t('Törlés')}</button></div></div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click',e=>{ if(e.target===div) div.remove(); });
+  div.querySelector('#cf-no').onclick=()=>div.remove();
+  div.querySelector('#cf-yes').onclick=()=>{ div.remove(); onYes(); };
+}
 let toastTimer=null;
 function toast(msg){
   const t = document.getElementById('toast');
@@ -1781,8 +2125,8 @@ loadAll().then(()=>{
   if(!storageOk) toast(t('Figyelem: a mentés nem érhető el, a receptek csak erre a munkamenetre maradnak meg'));
 });
 
-if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); });
 }
 </script>
 </body>
