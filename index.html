@@ -391,6 +391,7 @@ const EN = {
 'Raktár':'Inventory','Raktár és árak':'Inventory & prices','Egyéb':'Misc','Készlet':'Stock','Ár':'Price','/kg':'/kg','/100g':'/100g','/db':'/ea','Adj hozzá recepteket, és a hozzávalóik itt megjelennek — beírhatod a készletet és az árakat.':'Add recipes and their ingredients show up here — enter stock and prices.',
 'Válaszd ki a legördülőből, mi van készleten (ugyanaz a kínálat, mint a receptnél), vagy vegyél fel egyénit. A készlet mennyisége opcionális.':'Pick from the dropdown what you have in stock (same choices as in a recipe) or add a custom item. Stock amount is optional.',
 'Itt tartod nyilván, mi van otthon. Válassz a legördülőből, add meg a mennyiséget — legközelebb rögtön ezt látod.':'Keep track of what you have at home. Pick from the dropdown, enter the amount — you\'ll see it right away next time.','Nincs készleten':'Nothing in stock',
+'🍺 Kész a főzés! Egészségedre!':'🍺 Brew day complete! Cheers!',
 'Válassz tételt a legördülő listából (ugyanaz a kínálat, mint a receptnél), vagy vegyél fel egyénit. A készlet és az ár opcionális — ha beírod az árakat, a recepteknél és a bevásárlólistán megjelenik a becsült költség. A pénznemet a ⚙ Felszerelés alatt állítod.':'Pick an item from the dropdown (same choices as in a recipe) or add a custom one. Stock and price are optional — enter prices and the estimated cost appears on recipes and the shopping list. Set the currency under ⚙ Equipment.',
 'Hozzáadás listából':'Add from list','+ Hozzáadás listából…':'+ Add from list…','— válassz —':'— choose —','+ egyéni tétel…':'+ custom item…','Tétel neve:':'Item name:','Eltávolítás':'Remove','Még nincs tétel ebben a kategóriában.':'No items in this category yet.','Ez a tétel már szerepel':'This item is already listed','A készlet és az ár opcionális. Ha beírod az árakat, a recepteknél és a bevásárlólistán megjelenik a becsült költség. A pénznemet a ⚙ Felszerelés alatt állítod.':'Stock and price are optional. Enter prices and the estimated cost appears on recipes and the shopping list. Set the currency under ⚙ Equipment.',
 'Költség':'Cost','Összes alapanyag':'Total ingredients','Egy literre':'Per liter','Egy 0,5 L-es üvegre':'Per 0.5 L bottle','Kb. ennyi 0,5 L-es üveg':'Approx. 0.5 L bottles','db':'ea','néhány hozzávalónak nincs ára a Raktárban — a végösszeg hiányos':'some ingredients have no price in Inventory — total is incomplete',
@@ -1474,8 +1475,15 @@ function renderBatchEdit(){
     cb.addEventListener('change', ()=>{
       b.checks[cb.dataset.chk] = cb.checked;
       cb.closest('.chk').classList.toggle('done', cb.checked);
+      const doneCount = Object.values(b.checks).filter(Boolean).length;
       const p=document.getElementById('bb-prog');
-      if(p) p.textContent = Object.values(b.checks).filter(Boolean).length+'/'+steps.length;
+      if(p) p.textContent = doneCount+'/'+steps.length;
+      // minden lépés kész ÉS most pipáltuk be az utolsót → ünneplés (egyszer)
+      if(cb.checked && doneCount===steps.length && steps.length>0){
+        if(!b.celebrated){ b.celebrated=true; fireworks(); toast(t('🍺 Kész a főzés! Egészségedre!')); }
+      } else if(doneCount<steps.length){
+        b.celebrated=false; // ha visszavesz egy pipát, legközelebb újra ünnepelhet
+      }
       scheduleSave();
     });
   });
@@ -1510,6 +1518,61 @@ function renderBatchEdit(){
   });
 }
 
+/* ---------- tűzijáték (főzés kész) ---------- */
+function fireworks(){
+  const cv=document.createElement('canvas');
+  cv.style.cssText='position:fixed;inset:0;z-index:90;pointer-events:none';
+  document.body.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  let W,H,dpr=Math.min(window.devicePixelRatio||1,2);
+  function resize(){ W=cv.width=innerWidth*dpr; H=cv.height=innerHeight*dpr; cv.style.width=innerWidth+'px'; cv.style.height=innerHeight+'px'; }
+  resize(); window.addEventListener('resize',resize);
+  const colors=['#E5A63C','#F0B653','#C97C4A','#94A85A','#EFE7D6','#F6C86B'];
+  const parts=[]; let bursts=0; const maxBursts=6; const start=performance.now();
+  function burst(x,y){
+    const n=44+Math.floor(Math.random()*22);
+    const col=colors[Math.floor(Math.random()*colors.length)];
+    const col2=colors[Math.floor(Math.random()*colors.length)];
+    for(let i=0;i<n;i++){
+      const a=(Math.PI*2*i)/n + Math.random()*0.2;
+      const sp=(2.2+Math.random()*3.4)*dpr;
+      parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,col:Math.random()<0.5?col:col2,sz:(1.6+Math.random()*2)*dpr});
+    }
+  }
+  function tick(now){
+    const t=now-start;
+    ctx.clearRect(0,0,W,H);
+    if(bursts<maxBursts && t>bursts*260){
+      burst((0.2+Math.random()*0.6)*W,(0.2+Math.random()*0.4)*H); bursts++;
+    }
+    for(const p of parts){
+      p.vy+=0.03*dpr; p.vx*=0.99; p.vy*=0.99;
+      p.x+=p.vx; p.y+=p.vy; p.life-=0.012;
+      if(p.life>0){
+        ctx.globalAlpha=Math.max(p.life,0);
+        ctx.fillStyle=p.col;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.sz,0,7); ctx.fill();
+      }
+    }
+    ctx.globalAlpha=1;
+    for(let i=parts.length-1;i>=0;i--) if(parts[i].life<=0) parts.splice(i,1);
+    if(t<3600 || parts.length){ requestAnimationFrame(tick); }
+    else { window.removeEventListener('resize',resize); cv.remove(); }
+  }
+  requestAnimationFrame(tick);
+  // rövid, ünneplő hangsor
+  try{
+    const ac=new (window.AudioContext||window.webkitAudioContext)();
+    [523,659,784,1047].forEach((f,i)=>{
+      const o=ac.createOscillator(), g=ac.createGain();
+      o.connect(g); g.connect(ac.destination); o.frequency.value=f; o.type='triangle';
+      const s=ac.currentTime+i*0.12;
+      g.gain.setValueAtTime(0.0001,s); g.gain.exponentialRampToValueAtTime(0.25,s+0.03);
+      g.gain.exponentialRampToValueAtTime(0.001,s+0.5);
+      o.start(s); o.stop(s+0.52);
+    });
+  }catch(e){}
+}
 /* ---------- időzítő ---------- */
 let timerState = null;
 function startTimer(min, label){
