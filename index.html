@@ -2182,6 +2182,21 @@ document.getElementById('import-file').addEventListener('change', e=>{
   e.target.value='';
 });
 
+/* ==== DEMO-TAP START (bemutató mód — később törlendő) ==== */
+(function(){
+  const st=document.createElement('style');
+  st.textContent='@keyframes fozde-tap{0%{transform:translate(-50%,-50%) scale(.3);opacity:.9}100%{transform:translate(-50%,-50%) scale(2.4);opacity:0}}.fozde-tap{position:fixed;width:46px;height:46px;border-radius:50%;border:3px solid #E5A63C;background:radial-gradient(circle,rgba(229,166,60,.35),transparent 70%);pointer-events:none;z-index:99999;animation:fozde-tap .55s ease-out forwards}';
+  document.head.appendChild(st);
+  function ping(x,y){
+    const d=document.createElement('div'); d.className='fozde-tap';
+    d.style.left=x+'px'; d.style.top=y+'px';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),560);
+  }
+  document.addEventListener('pointerdown',e=>{ ping(e.clientX,e.clientY); }, true);
+})();
+/* ==== DEMO-TAP END ==== */
+
 loadAll().then(()=>{
   applyUi();
   render();
